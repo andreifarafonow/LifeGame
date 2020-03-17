@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29905.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LifeGame", "LifeGame\LifeGame.csproj", "{18412A10-36AB-428E-8DE0-43F40318DACE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LifeGame", "LifeGame\LifeGame.csproj", "{18412A10-36AB-428E-8DE0-43F40318DACE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameCore", "GameCore\GameCore.csproj", "{8158AE9B-2710-48BE-8C28-25B3893DEEDD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{18412A10-36AB-428E-8DE0-43F40318DACE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18412A10-36AB-428E-8DE0-43F40318DACE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18412A10-36AB-428E-8DE0-43F40318DACE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8158AE9B-2710-48BE-8C28-25B3893DEEDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8158AE9B-2710-48BE-8C28-25B3893DEEDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8158AE9B-2710-48BE-8C28-25B3893DEEDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8158AE9B-2710-48BE-8C28-25B3893DEEDD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
