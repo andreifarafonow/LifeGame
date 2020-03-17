@@ -1,4 +1,5 @@
 ﻿using System;
+using GameCore;
 
 namespace LifeGame
 {
@@ -6,7 +7,9 @@ namespace LifeGame
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var game = new Game(10, 10);
+
+            game.A[7] = 5;
         }
     }
 }
