@@ -4,12 +4,23 @@ namespace GameCore
 {
     public class Game
     {
+        WorldCell[,] map;
+
+        public WorldCell[,] Map
+        {
+            get => (WorldCell[,])map.Clone(); 
+        }
+
+        public static Random randomSingletone { get; } = new Random();
+
         /// <param name="N">Высота игрового поля</param>
         /// <param name="M">Ширина игрового поля</param>
         public Game(int n, int m)
         {
-            N = n;
-            M = m;
+            Height = n;
+            Width = m;
+
+            map = new WorldCell[n, m];
         }
 
         /// <summary>
@@ -17,18 +28,30 @@ namespace GameCore
         /// </summary>
         public void Start()
         {
-            
+            GenerateRandomMap();
+        }
+
+        void GenerateRandomMap()
+        {
+            for (int i = 0; i < Height; i++)
+            {
+                for (int j = 0; j < Width; j++)
+                {
+                    var type = (WorldCell.CellType)randomSingletone.Next(0, Enum.GetNames(typeof(WorldCell.CellType)).Length);
+                    map[i, j] = new WorldCell(i, j, type);
+                }
+            }
         }
 
         /// <summary>
         /// Высота игрового поля
         /// </summary>
-        public int N { get; private set; }
+        public int Height { get; private set; }
 
         /// <summary>
         /// Ширина игрового поля
         /// </summary>
-        public int M { get; private set; }
+        public int Width { get; private set; }
     }
 
     abstract class GameObject
@@ -39,7 +62,7 @@ namespace GameCore
     /// <summary>
     /// Класс ячейки мира.
     /// </summary>
-    class WorldCell
+    public class WorldCell
     {
         /// <summary>
         /// Создаёт новую ячейку мира по заданным координатам
@@ -50,6 +73,7 @@ namespace GameCore
         {
             Nposition = nPos;
             Mposition = mPos;
+            TypeOfCell = type;
         }
 
         /// <summary>
@@ -66,7 +90,7 @@ namespace GameCore
         /// Тип ячейки
         /// </summary>
         public CellType TypeOfCell
-        { get; private set; }
+        { get; set; }
 
         public enum CellType
         {
