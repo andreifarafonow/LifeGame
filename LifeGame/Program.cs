@@ -11,19 +11,24 @@ namespace LifeGame
 
             game.Start();
 
-            for (int i = 0; i < game.Map.GetLength(0); i++)
-            {
-                for (int j = 0; j < game.Map.GetLength(1); j++)
-                {
-                    Console.Write(game.Map[i, j].TypeOfCell == WorldCell.CellType.Ground ? "▒": "▓");
-                }
-                Console.WriteLine();
-            }
+            var map = game.Map;
+
+            DisplayMap(map);
         }
 
-        static void DisplayMap()
+        static void DisplayMap(WorldCell[,] map)
         {
-            
+            for (int i = 0; i < map.GetLength(0); i++)
+            {
+                for (int k = 0; k < 3; k++)
+                {
+                    for (int j = 0; j < map.GetLength(1); j++)
+                    {
+                        Console.Write(map[i, j].TypeOfCell == WorldCell.CellType.Ground ? "▒▒▒▒▒▒" : "▓▓▓▓▓▓");
+                    }
+                    Console.WriteLine();
+                }
+            }
         }
     }
 }
