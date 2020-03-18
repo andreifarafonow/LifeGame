@@ -12,6 +12,8 @@ namespace GameCore.GameInstances
             Y = yPos;
         }
 
+        protected abstract bool CanLocationAt(WorldCell[,] map, int x, int y);
+
         /// <summary>
         /// Номер столбца карты в котором находится объект
         /// </summary>
@@ -27,10 +29,12 @@ namespace GameCore.GameInstances
     {
         private Animal(int xPos, int yPos, AnimalType type) : base(xPos, yPos)
         {
-
+            TypeOfAnimal = type;
         }
 
-        enum AnimalType
+        public AnimalType TypeOfAnimal { get; private set; }
+
+        public enum AnimalType
         {
             Fish,
             Duck,
@@ -43,6 +47,11 @@ namespace GameCore.GameInstances
         }
 
         public static Animal GenerateRandomAnimal()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool CanLocationAt(WorldCell[,] map, int x, int y)
         {
             throw new NotImplementedException();
         }
