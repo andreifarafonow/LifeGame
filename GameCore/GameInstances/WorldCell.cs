@@ -16,20 +16,20 @@ namespace GameCore.GameInstances
         /// <param name="yPos">Номер строки в котором содержится ячейка</param>
         public WorldCell(int xPos, int yPos, CellType type)
         {
-            Nposition = yPos;
-            Mposition = xPos;
+            Y = yPos;
+            X = xPos;
             TypeOfCell = type;
         }
 
         /// <summary>
-        /// Номер строки в котором содержится ячейка
-        /// </summary>
-        public int Nposition { get; private set; }
-
-        /// <summary>
         /// Номер столбца в котором содержится ячейка
         /// </summary>
-        public int Mposition { get; private set; }
+        public int X { get; private set; }
+
+        /// <summary>
+        /// Номер строки в котором содержится ячейка
+        /// </summary>
+        public int Y { get; private set; }
 
         /// <summary>
         /// Тип ячейки
