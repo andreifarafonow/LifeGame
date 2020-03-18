@@ -1,5 +1,6 @@
 ﻿using System;
 using GameCore;
+using GameCore.GameInstances;
 
 namespace LifeGame
 {
