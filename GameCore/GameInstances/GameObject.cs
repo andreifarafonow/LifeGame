@@ -1,15 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace GameCore.GameInstances
 {
-    abstract class GameObject
+    public abstract class GameObject
     {
-        public GameObject(int xPos, int yPos, Game game)
+        /// <summary>
+        /// Конструирует новый игровой объект в случайной, свойственной для него позиции
+        /// </summary>
+        /// <param name="game">Объект игры</param>
+        public GameObject(Game game)
         {
-            X = xPos;
-            Y = yPos;
+            // Позиционируем элемент на карте
+            do
+            {
+                X = Game.randomSingletone.Next(game.Width);
+                Y = Game.randomSingletone.Next(game.Height);
+            }
+            while (!CanLocationAt());
+
             GameInstance = game;
             Map = game.Map;
         }
@@ -46,9 +57,9 @@ namespace GameCore.GameInstances
 
     class Animal : GameObject
     {
-        private Animal(int xPos, int yPos, AnimalType type, Game game) : base(xPos, yPos, game)
+        private Animal(Game game) : base(game)
         {
-            TypeOfAnimal = type;
+            TypeOfAnimal = (AnimalType)Game.randomSingletone.Next(Enum.GetNames(typeof(AnimalType)).Length); ;
         }
 
         public AnimalType TypeOfAnimal { get; private set; }
@@ -65,33 +76,44 @@ namespace GameCore.GameInstances
             Rabbit
         }
 
-        /// <summary>
-        /// Генерирует животное случайного вида в свойственной ему среде
-        /// </summary>
-        /// <returns>Объект животного</returns>
-        public static Animal GenerateRandomAnimal(Game game)
-        {
-            var type = (AnimalType)Game.randomSingletone.Next(Enum.GetNames(typeof(AnimalType)).Length);
-
-            Animal result = new Animal(0, 0, type, game);
-
-            do
-            {
-                result.X = Game.randomSingletone.Next(game.Width);
-                result.Y = Game.randomSingletone.Next(game.Height);
-            }
-            while (!result.CanLocationAt());
-
-            return result;
-        }
-
         protected override bool CanLocationAt()
         {
+            bool IsSolid() => GameInstance.GameObjects.Where()
+
             switch (TypeOfAnimal)
             {
                 case AnimalType.Fish:
                     return Map[Y, X].TypeOfCell == WorldCell.CellType.Water;
             }
+        }
+    }
+
+    class SolidObject : GameObject
+    {
+        private SolidObject(Game game, SolidObjectType type) : base(game)
+        {
+            TypeOfSolid = type;
+        }
+
+        public SolidObjectType TypeOfSolid { get; }
+
+        protected override bool CanLocationAt()
+        {
+            switch (TypeOfSolid)
+            {
+                case SolidObjectType.Stone:
+                    return true;
+                case SolidObjectType.Tree:
+                    return GameInstance.Map[Y, X].TypeOfCell == WorldCell.CellType.Ground;
+                default:
+                    return false;
+            }
+        }
+
+        public enum SolidObjectType
+        {
+            Stone,
+            Tree
         }
     }
 }

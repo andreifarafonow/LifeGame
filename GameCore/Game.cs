@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using GameCore.GameInstances;
 
 namespace GameCore
@@ -10,6 +11,16 @@ namespace GameCore
         public WorldCell[,] Map
         {
             get => (WorldCell[,])map.Clone(); 
+        }
+
+        protected List<GameObject> gameObjects = new List<GameObject>();
+
+        /// <summary>
+        /// Список объектов, размещённых на карте
+        /// </summary>
+        public GameObject[] GameObjects 
+        {
+            get => gameObjects.ToArray();
         }
 
         public static Random randomSingletone { get; } = new Random();
