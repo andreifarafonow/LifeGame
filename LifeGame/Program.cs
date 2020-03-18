@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using GameCore;
 using GameCore.GameInstances;
 
@@ -12,23 +13,40 @@ namespace LifeGame
 
             game.Start();
 
-            var map = game.Map;
-
-            DisplayMap(map);
+            DisplayGame(game);
         }
 
-        static void DisplayMap(WorldCell[,] map)
+        static void DisplayGame(Game game)
         {
-            for (int i = 0; i < map.GetLength(0); i++)
+            int xGrid = 0, yGrid = 0;
+
+            void CellWriteLine(int x, string text)
             {
-                for (int k = 0; k < 3; k++)
+                Console.SetCursorPosition(xGrid + x * 9, Console.CursorTop);
+
+                Console.WriteLine(text);
+            }
+
+            for (int y = 0; y < game.Map.GetLength(0); y++)
+            {
+                for (int x = 0; x < game.Map.GetLength(1); x++)
                 {
-                    for (int j = 0; j < map.GetLength(1); j++)
-                    {
-                        Console.Write(map[i, j].TypeOfCell == WorldCell.CellType.Ground ? "▒▒▒▒▒▒" : "▓▓▓▓▓▓");
-                    }
-                    Console.WriteLine();
+                    char border = game.Map[y, x].TypeOfCell == WorldCell.CellType.Ground ? '▒' : '▓';                  
+
+                    CellWriteLine(x, string.Concat(Enumerable.Repeat(border, 9)));
+                    CellWriteLine(x, string.Concat(Enumerable.Repeat(border, 9))); 
+                    CellWriteLine(x, string.Concat(Enumerable.Repeat(border, 9)));
+                    CellWriteLine(x, string.Concat(Enumerable.Repeat(border, 9)));
+                    CellWriteLine(x, string.Concat(Enumerable.Repeat(border, 9)));
+
+                    Console.SetCursorPosition(40, 40);
                 }
+            }
+
+            foreach (var obj in game.GameObjects)
+            {
+                Console.SetCursorPosition(xGrid + obj.X * 9 + 4, yGrid + obj.Y * 5 + 2);
+                Console.Write(obj.ToString());
             }
         }
     }

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace GameCore.GameInstances
 {
@@ -57,7 +54,7 @@ namespace GameCore.GameInstances
 
     class Animal : GameObject
     {
-        private Animal(Game game) : base(game)
+        public Animal(Game game) : base(game)
         {
             TypeOfAnimal = (AnimalType)Game.randomSingletone.Next(Enum.GetNames(typeof(AnimalType)).Length); ;
         }
@@ -78,21 +75,25 @@ namespace GameCore.GameInstances
 
         protected override bool CanLocationAt()
         {
-            bool IsSolid() => GameInstance.GameObjects.Where()
+            throw new NotImplementedException();
+            /*bool CollisionWithSolid() => GameInstance.GameObjects
+                .Where(obj => obj.X == X && obj.Y == Y)
+                .Any(obj => obj is SolidObject);
 
             switch (TypeOfAnimal)
             {
                 case AnimalType.Fish:
-                    return Map[Y, X].TypeOfCell == WorldCell.CellType.Water;
-            }
+                    return Map[Y, X].TypeOfCell == WorldCell.CellType.Water && !CollisionWithSolid();
+
+            }*/
         }
     }
 
     class SolidObject : GameObject
     {
-        private SolidObject(Game game, SolidObjectType type) : base(game)
+        public SolidObject(Game game) : base(game)
         {
-            TypeOfSolid = type;
+            TypeOfSolid = (SolidObjectType)Game.randomSingletone.Next(Enum.GetNames(typeof(SolidObjectType)).Length); ;
         }
 
         public SolidObjectType TypeOfSolid { get; }

@@ -41,6 +41,15 @@ namespace GameCore
         public void Start()
         {
             GenerateRandomMap();
+            GenerateObjectsOnMap(10);
+        }
+
+        private void GenerateObjectsOnMap(int num)
+        {
+            for (int i = 0; i < num; i++)
+            {
+                gameObjects.Add(new SolidObject(this));
+            }
         }
 
         void GenerateRandomMap()
