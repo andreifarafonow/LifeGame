@@ -8,6 +8,9 @@ namespace GameCore
     {
         WorldCell[,] map;
 
+        /// <summary>
+        /// Карта игры
+        /// </summary>
         public WorldCell[,] Map
         {
             get => (WorldCell[,])map.Clone(); 
@@ -44,6 +47,10 @@ namespace GameCore
             GenerateObjectsOnMap(100);
         }
 
+        /// <summary>
+        /// Расставляет объекты на карте случайным образом
+        /// </summary>
+        /// <param name="num">Кол-во объектов для расстановки</param>
         private void GenerateObjectsOnMap(int num)
         {
             int solidCount = randomSingletone.Next(num);

@@ -5,7 +5,7 @@ namespace GameCore.GameInstances
 {
     public abstract class GameObject
     {
-        static int LastId { get; set; } = 1;
+        static int LastId { get; set; }
 
 
         /// <summary>
@@ -17,12 +17,14 @@ namespace GameCore.GameInstances
             GameInstance = game;
             Map = game.Map;
 
-            Id = LastId++;
+            Id = ++LastId;
         }
 
+        /// <summary>
+        /// Начальное позиционирование объекта на карте
+        /// </summary>
         protected void StartPositionSet()
         {
-            // Позиционируем элемент на карте
             do
             {
                 X = Game.randomSingletone.Next(GameInstance.Width);
@@ -40,6 +42,9 @@ namespace GameCore.GameInstances
         /// <returns></returns>
         protected abstract bool CanLocationAt();
 
+        /// <summary>
+        /// Идентификатор объекта
+        /// </summary>
         public int Id { get; }
 
         /// <summary>
@@ -63,6 +68,9 @@ namespace GameCore.GameInstances
         protected WorldCell[,] Map { get; }
     }
 
+    /// <summary>
+    /// Класс животного. Наследуется от GameObject
+    /// </summary>
     class Animal : GameObject
     {
         public Animal(Game game) : base(game)
@@ -111,6 +119,9 @@ namespace GameCore.GameInstances
         }
     }
 
+    /// <summary>
+    /// Класс неподвижного объекта. Наследуется от GameObject
+    /// </summary>
     class SolidObject : GameObject
     {
         public SolidObject(Game game) : base(game)

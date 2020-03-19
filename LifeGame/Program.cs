@@ -7,8 +7,13 @@ namespace LifeGame
 {
     class Program
     {
+
         static void Main(string[] args)
         {
+            Console.WindowHeight = Console.LargestWindowHeight;
+            Console.WindowWidth = Console.LargestWindowWidth;
+
+
             var game = new Game(5, 10);
 
             game.Start();
@@ -20,25 +25,34 @@ namespace LifeGame
         {
             int gridLeftMargin = 0, gridTopMargin = 0;
 
-            void DrawCell(int xStart, int yStart, int x, int y, int cellWidth, int cellHeight, char brush)
+            void DrawCell(int xStart, int yStart, int x, int y, int cellWidth, int cellHeight, bool ground)
             {
+
                 for (int i = 0; i < cellHeight; i++)
                 {
+                    if (ground)
+                        Console.ForegroundColor = Console.BackgroundColor = ConsoleColor.DarkGreen;
+                    else
+                        Console.ForegroundColor = Console.BackgroundColor = ConsoleColor.Cyan;
+
                     Console.SetCursorPosition(xStart + x * cellWidth, yStart + y * cellHeight + i);
 
-                    Console.WriteLine(string.Concat(Enumerable.Repeat(brush, cellWidth)));
+                    Console.WriteLine(string.Concat(Enumerable.Repeat('█', cellWidth)));
                 }
+
             }
 
             for (int y = 0; y < game.Map.GetLength(0); y++)
             {
                 for (int x = 0; x < game.Map.GetLength(1); x++)
                 {
-                    char border = game.Map[y, x].TypeOfCell == WorldCell.CellType.Ground ? '▒' : '▓';
+                    bool ground = game.Map[y, x].TypeOfCell == WorldCell.CellType.Ground;
 
-                    DrawCell(gridLeftMargin, gridTopMargin, x, y, 9, 5, border);
+                    DrawCell(gridLeftMargin, gridTopMargin, x, y, 9, 5, ground);
 
                     var objectsOnThisCell = game.GameObjects.Where(obj => obj.X == x && obj.Y == y);
+
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
 
                     if (objectsOnThisCell.Count() > 3)
                     {
@@ -56,24 +70,15 @@ namespace LifeGame
                             Console.Write(name);
 
                             if(offset <= 0)
-                            {
                                 offset = -offset + 1;
-                            }
                             else
-                            {
                                 offset = -offset;
-                            }
                         }
                     }
                 }
             }
 
-            /*foreach (var obj in game.GameObjects)
-            {
-                string name = obj.ToString();
-                Console.SetCursorPosition(xGrid + obj.X * 9 + 4 - name.Length / 2, yGrid + obj.Y * 5 + 2);
-                Console.Write(name);
-            }*/
+            Console.ResetColor();
 
             Console.SetCursorPosition(0, game.Height * 5);
         }
