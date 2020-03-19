@@ -7,12 +7,10 @@ namespace LifeGame
 {
     class Program
     {
-
         static void Main(string[] args)
         {
             Console.WindowHeight = Console.LargestWindowHeight;
             Console.WindowWidth = Console.LargestWindowWidth;
-
 
             var game = new Game(5, 10);
 
@@ -23,11 +21,10 @@ namespace LifeGame
 
         static void DisplayGame(Game game)
         {
-            int gridLeftMargin = 0, gridTopMargin = 0;
+            int gridLeftMargin = 4, gridTopMargin = 2;
 
             void DrawCell(int xStart, int yStart, int x, int y, int cellWidth, int cellHeight, bool ground)
             {
-
                 for (int i = 0; i < cellHeight; i++)
                 {
                     if (ground)
@@ -39,7 +36,6 @@ namespace LifeGame
 
                     Console.WriteLine(string.Concat(Enumerable.Repeat('█', cellWidth)));
                 }
-
             }
 
             for (int y = 0; y < game.Map.GetLength(0); y++)
@@ -80,7 +76,7 @@ namespace LifeGame
 
             Console.ResetColor();
 
-            Console.SetCursorPosition(0, game.Height * 5);
+            Console.SetCursorPosition(0, game.Height * 5 + gridTopMargin + 1);
         }
     }
 }
