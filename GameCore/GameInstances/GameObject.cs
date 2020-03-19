@@ -8,18 +8,21 @@ namespace GameCore.GameInstances
         /// Конструирует новый игровой объект в случайной, свойственной для него позиции
         /// </summary>
         /// <param name="game">Объект игры</param>
-        public GameObject(Game game)
+        protected GameObject(Game game)
+        {
+            GameInstance = game;
+            Map = game.Map;
+        }
+
+        protected void StartPositionSet()
         {
             // Позиционируем элемент на карте
             do
             {
-                X = Game.randomSingletone.Next(game.Width);
-                Y = Game.randomSingletone.Next(game.Height);
+                X = Game.randomSingletone.Next(GameInstance.Width);
+                Y = Game.randomSingletone.Next(GameInstance.Height);
             }
             while (!CanLocationAt());
-
-            GameInstance = game;
-            Map = game.Map;
         }
 
         /// <summary>
@@ -93,10 +96,13 @@ namespace GameCore.GameInstances
     {
         public SolidObject(Game game) : base(game)
         {
-            TypeOfSolid = (SolidObjectType)Game.randomSingletone.Next(Enum.GetNames(typeof(SolidObjectType)).Length); ;
+            int solidTypeNum = Game.randomSingletone.Next(Enum.GetNames(typeof(SolidObjectType)).Length);
+            TypeOfSolid = (SolidObjectType)solidTypeNum;
+
+            StartPositionSet();
         }
 
-        public SolidObjectType TypeOfSolid { get; }
+        public SolidObjectType TypeOfSolid { get; private set; }
 
         protected override bool CanLocationAt()
         {
