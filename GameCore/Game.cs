@@ -46,9 +46,18 @@ namespace GameCore
 
         private void GenerateObjectsOnMap(int num)
         {
+            int solidCount = randomSingletone.Next(num);
+
             for (int i = 0; i < num; i++)
             {
-                gameObjects.Add(new SolidObject(this));
+                GameObject created;
+
+                if (i < solidCount)
+                    created = new SolidObject(this);
+                else
+                    created = new Animal(this);
+
+                gameObjects.Add(created);
             }
         }
 

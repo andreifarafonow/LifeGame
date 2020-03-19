@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Linq;
 
 namespace GameCore.GameInstances
 {
     public abstract class GameObject
     {
+        static int LastId { get; set; } = 1;
+
+
         /// <summary>
         /// Конструирует новый игровой объект в случайной, свойственной для него позиции
         /// </summary>
@@ -12,6 +16,8 @@ namespace GameCore.GameInstances
         {
             GameInstance = game;
             Map = game.Map;
+
+            Id = LastId++;
         }
 
         protected void StartPositionSet()
@@ -33,6 +39,8 @@ namespace GameCore.GameInstances
         /// <param name="y">Позиция объекта по Y</param>
         /// <returns></returns>
         protected abstract bool CanLocationAt();
+
+        public int Id { get; }
 
         /// <summary>
         /// Номер столбца карты в котором находится объект
@@ -59,7 +67,9 @@ namespace GameCore.GameInstances
     {
         public Animal(Game game) : base(game)
         {
-            TypeOfAnimal = (AnimalType)Game.randomSingletone.Next(Enum.GetNames(typeof(AnimalType)).Length); ;
+            TypeOfAnimal = (AnimalType)Game.randomSingletone.Next(Enum.GetNames(typeof(AnimalType)).Length);
+
+            StartPositionSet();
         }
 
         public AnimalType TypeOfAnimal { get; private set; }
@@ -78,17 +88,26 @@ namespace GameCore.GameInstances
 
         protected override bool CanLocationAt()
         {
-            throw new NotImplementedException();
-            /*bool CollisionWithSolid() => GameInstance.GameObjects
-                .Where(obj => obj.X == X && obj.Y == Y)
-                .Any(obj => obj is SolidObject);
+            bool colilision = GameInstance.GameObjects.Any(obj => obj.X == X && obj.Y == Y && obj is SolidObject);
+
+            var inCell = GameInstance.GameObjects.Where(obj => obj.X == X && obj.Y == Y);
 
             switch (TypeOfAnimal)
             {
                 case AnimalType.Fish:
-                    return Map[Y, X].TypeOfCell == WorldCell.CellType.Water && !CollisionWithSolid();
+                    return Map[Y, X].TypeOfCell == WorldCell.CellType.Water && !colilision;
+                case AnimalType.Turtle:
+                    return !colilision;
+                case AnimalType.Rabbit:
+                    return Map[Y, X].TypeOfCell == WorldCell.CellType.Ground && !colilision;
+                default:
+                    return true;
+            }
+        }
 
-            }*/
+        public override string ToString()
+        {
+            return TypeOfAnimal.ToString();
         }
     }
 
@@ -96,8 +115,7 @@ namespace GameCore.GameInstances
     {
         public SolidObject(Game game) : base(game)
         {
-            int solidTypeNum = Game.randomSingletone.Next(Enum.GetNames(typeof(SolidObjectType)).Length);
-            TypeOfSolid = (SolidObjectType)solidTypeNum;
+            TypeOfSolid = (SolidObjectType)Game.randomSingletone.Next(Enum.GetNames(typeof(SolidObjectType)).Length);
 
             StartPositionSet();
         }
