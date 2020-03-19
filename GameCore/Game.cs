@@ -41,7 +41,7 @@ namespace GameCore
         public void Start()
         {
             GenerateRandomMap();
-            GenerateObjectsOnMap(10);
+            GenerateObjectsOnMap(100);
         }
 
         private void GenerateObjectsOnMap(int num)

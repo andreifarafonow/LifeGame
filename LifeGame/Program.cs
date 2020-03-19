@@ -39,16 +39,28 @@ namespace LifeGame
                     CellWriteLine(x, y, string.Concat(Enumerable.Repeat(border, 9)), 3);
                     CellWriteLine(x, y, string.Concat(Enumerable.Repeat(border, 9)), 4);
 
+                    var objectsOnThisCell = game.GameObjects.Where(obj => obj.X == x && obj.Y == y);
+
+                    if (objectsOnThisCell.Count() > 3)
+                    {
+                        Console.SetCursorPosition(xGrid + x * 9 + 3, yGrid + y * 5 + 2);
+                        Console.Write($"[{objectsOnThisCell.Count()}]");
+                    }
+                    else
+                    {
+                        
+                    }
                 }
             }
 
-            foreach (var obj in game.GameObjects)
+            /*foreach (var obj in game.GameObjects)
             {
-                Console.SetCursorPosition(xGrid + obj.X * 9 + 4, yGrid + obj.Y * 5 + 2);
-                Console.Write(obj.ToString());
-            }
+                string name = obj.ToString();
+                Console.SetCursorPosition(xGrid + obj.X * 9 + 4 - name.Length / 2, yGrid + obj.Y * 5 + 2);
+                Console.Write(name);
+            }*/
 
-            Console.SetCursorPosition(100, 100);
+            Console.SetCursorPosition(0, game.Height * 5);
         }
     }
 }
