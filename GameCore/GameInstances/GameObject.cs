@@ -116,5 +116,10 @@ namespace GameCore.GameInstances
             Stone,
             Tree
         }
+
+        public override string ToString()
+        {
+            return TypeOfSolid.ToString();
+        }
     }
 }

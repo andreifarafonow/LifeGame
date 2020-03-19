@@ -39,15 +39,16 @@ namespace LifeGame
                     CellWriteLine(x, y, string.Concat(Enumerable.Repeat(border, 9)), 3);
                     CellWriteLine(x, y, string.Concat(Enumerable.Repeat(border, 9)), 4);
 
-                    //Console.SetCursorPosition(40, 40);
                 }
             }
 
-            /*foreach (var obj in game.GameObjects)
+            foreach (var obj in game.GameObjects)
             {
                 Console.SetCursorPosition(xGrid + obj.X * 9 + 4, yGrid + obj.Y * 5 + 2);
                 Console.Write(obj.ToString());
-            }*/
+            }
+
+            Console.SetCursorPosition(100, 100);
         }
     }
 }
