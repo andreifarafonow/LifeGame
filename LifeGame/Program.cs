@@ -18,37 +18,52 @@ namespace LifeGame
 
         static void DisplayGame(Game game)
         {
-            int xGrid = 0, yGrid = 0;
+            int gridLeftMargin = 0, gridTopMargin = 0;
 
-            void CellWriteLine(int x, int y, string text, int line)
+            void DrawCell(int xStart, int yStart, int x, int y, int cellWidth, int cellHeight, char brush)
             {
-                Console.SetCursorPosition(xGrid + x * 9, yGrid + y * 5 + line);
+                for (int i = 0; i < cellHeight; i++)
+                {
+                    Console.SetCursorPosition(xStart + x * cellWidth, yStart + y * cellHeight + i);
 
-                Console.WriteLine(text);
+                    Console.WriteLine(string.Concat(Enumerable.Repeat(brush, cellWidth)));
+                }
             }
 
             for (int y = 0; y < game.Map.GetLength(0); y++)
             {
                 for (int x = 0; x < game.Map.GetLength(1); x++)
                 {
-                    char border = game.Map[y, x].TypeOfCell == WorldCell.CellType.Ground ? '▒' : '▓';                  
+                    char border = game.Map[y, x].TypeOfCell == WorldCell.CellType.Ground ? '▒' : '▓';
 
-                    CellWriteLine(x, y, string.Concat(Enumerable.Repeat(border, 9)), 0);
-                    CellWriteLine(x, y, string.Concat(Enumerable.Repeat(border, 9)), 1);
-                    CellWriteLine(x, y, string.Concat(Enumerable.Repeat(border, 9)), 2);
-                    CellWriteLine(x, y, string.Concat(Enumerable.Repeat(border, 9)), 3);
-                    CellWriteLine(x, y, string.Concat(Enumerable.Repeat(border, 9)), 4);
+                    DrawCell(gridLeftMargin, gridTopMargin, x, y, 9, 5, border);
 
                     var objectsOnThisCell = game.GameObjects.Where(obj => obj.X == x && obj.Y == y);
 
                     if (objectsOnThisCell.Count() > 3)
                     {
-                        Console.SetCursorPosition(xGrid + x * 9 + 3, yGrid + y * 5 + 2);
+                        Console.SetCursorPosition(gridLeftMargin + x * 9 + 3, gridTopMargin + y * 5 + 2);
                         Console.Write($"[{objectsOnThisCell.Count()}]");
                     }
-                    else
+                    else if(objectsOnThisCell.Count() > 0)
                     {
-                        
+                        int offset = 0;
+
+                        foreach (var obj in objectsOnThisCell)
+                        {
+                            string name = obj.ToString();
+                            Console.SetCursorPosition(gridLeftMargin + obj.X * 9 + 4 - name.Length / 2, gridTopMargin + obj.Y * 5 + 2 - offset);
+                            Console.Write(name);
+
+                            if(offset <= 0)
+                            {
+                                offset = -offset + 1;
+                            }
+                            else
+                            {
+                                offset = -offset;
+                            }
+                        }
                     }
                 }
             }
