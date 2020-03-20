@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GameCore.GameInstances
+﻿namespace GameCore.GameInstances
 {
     /// <summary>
     /// Класс ячейки мира.
