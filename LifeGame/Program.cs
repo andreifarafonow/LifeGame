@@ -10,7 +10,7 @@ namespace LifeGame
             Console.WindowHeight = Console.LargestWindowHeight;
             Console.WindowWidth = Console.LargestWindowWidth;
 
-            var game = new Game(5, 10);
+            var game = new Game(10, 25);
 
             game.Start();
 

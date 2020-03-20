@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace GameCore.GameInstances
+namespace GameCore.GameEntities
 {
     public abstract class GameObject
     {
@@ -9,7 +9,7 @@ namespace GameCore.GameInstances
 
 
         /// <summary>
-        /// Конструирует новый игровой объект в случайной, свойственной для него позиции
+        /// Конструирует новый игровой объект
         /// </summary>
         /// <param name="game">Объект игры</param>
         protected GameObject(Game game)
@@ -21,7 +21,7 @@ namespace GameCore.GameInstances
         }
 
         /// <summary>
-        /// Начальное позиционирование объекта на карте
+        /// Начальное позиционирование объекта на карте в случайной, свойственной для него позиции
         /// </summary>
         protected void StartPositionSet()
         {
@@ -77,10 +77,33 @@ namespace GameCore.GameInstances
         {
             TypeOfAnimal = (AnimalType)Game.randomSingletone.Next(Enum.GetNames(typeof(AnimalType)).Length);
 
+            Speed = SpeedOfType(TypeOfAnimal);
+
             StartPositionSet();
         }
 
+        private static int SpeedOfType(AnimalType type)
+        {
+            switch (type)
+            {
+                case AnimalType.Fish:
+                    return 1;
+                case AnimalType.Duck:
+                    return 2;
+                case AnimalType.Rabbit:
+                    return 3;
+                case AnimalType.Turtle:
+                    return 1;
+                case AnimalType.Sparrow:
+                    return 4;
+                default:
+                    return 0;
+            }
+        }
+
         public AnimalType TypeOfAnimal { get; private set; }
+
+        int Speed { get; }
 
         public enum AnimalType
         {
@@ -92,6 +115,66 @@ namespace GameCore.GameInstances
             Sparrow,
             Turtle,
             Rabbit
+        }
+
+        /// <summary>
+        /// Типы перемещений
+        /// </summary>
+        public enum MovingType
+        {
+            Swim,
+            Fly,
+            Go
+        }
+
+        /// <summary>
+        /// Направления перемещений
+        /// </summary>
+        public enum MovingDirection
+        {
+            Right,
+            Down,
+            Left,
+            Up
+        }
+
+        MovingType RandomPossibleMovingType()
+        {
+            MovingType[] possibleMovings = null;
+
+            switch (TypeOfAnimal)
+            {
+                case AnimalType.Fish:
+                    possibleMovings = new MovingType[]{ MovingType.Swim };
+                    break;
+                case AnimalType.Duck:
+                    possibleMovings = new MovingType[] { MovingType.Swim, MovingType.Fly, MovingType.Go };
+                    break;
+                case AnimalType.Sparrow:
+                    possibleMovings = new MovingType[] { MovingType.Fly, MovingType.Go };
+                    break;
+                case AnimalType.Turtle:
+                    possibleMovings = new MovingType[] { MovingType.Swim, MovingType.Go };
+                    break;
+                case AnimalType.Rabbit:
+                    possibleMovings = new MovingType[] { MovingType.Go };
+                    break;
+            }
+
+            return possibleMovings[Game.randomSingletone.Next(possibleMovings.Length)];
+        }
+
+        bool CheckMoveTo(int x, int y, MovingType movingType)
+        {
+            throw new NotImplementedException();
+            // Выход за границы карты
+            if (x < 0 || y < 0 || x >= GameInstance.Width || y >= GameInstance.Height)
+                return false;
+            if (movingType == MovingType.Swim)
+            {
+                if (GameInstance.Map[y, x].TypeOfCell == WorldCell.CellType.Ground)
+                    return false;
+            }
         }
 
         protected override bool CanLocationAt()
@@ -115,7 +198,21 @@ namespace GameCore.GameInstances
 
         public override string ToString()
         {
-            return TypeOfAnimal.ToString();
+            switch (TypeOfAnimal)
+            {
+                case AnimalType.Duck:
+                    return "Утка";
+                case AnimalType.Fish:
+                    return "Рыба";
+                case AnimalType.Rabbit:
+                    return "Кролик";
+                case AnimalType.Sparrow:
+                    return "Воробей";
+                case AnimalType.Turtle:
+                    return "Черепаха";
+                default:
+                    return "---";
+            }
         }
     }
 
@@ -154,7 +251,15 @@ namespace GameCore.GameInstances
 
         public override string ToString()
         {
-            return TypeOfSolid.ToString();
+            switch (TypeOfSolid)
+            {
+                case SolidObjectType.Stone:
+                    return "Камень";
+                case SolidObjectType.Tree:
+                    return "Дерево";
+                default:
+                    return "---";
+            }
         }
     }
 }

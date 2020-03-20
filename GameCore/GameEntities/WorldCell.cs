@@ -1,4 +1,4 @@
-﻿namespace GameCore.GameInstances
+﻿namespace GameCore.GameEntities
 {
     /// <summary>
     /// Класс ячейки мира.

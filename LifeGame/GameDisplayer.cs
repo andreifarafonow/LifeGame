@@ -1,5 +1,5 @@
 ﻿using GameCore;
-using GameCore.GameInstances;
+using GameCore.GameEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

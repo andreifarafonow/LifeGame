@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using GameCore.GameInstances;
+using GameCore.GameEntities;
 
 namespace GameCore
 {
@@ -44,7 +44,7 @@ namespace GameCore
         public void Start()
         {
             GenerateRandomMap();
-            GenerateObjectsOnMap(100);
+            GenerateObjectsOnMap(400);
         }
 
         /// <summary>
