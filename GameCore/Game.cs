@@ -13,6 +13,8 @@ namespace GameCore
         /// Карта игры
         /// </summary>
         public IMap Map { get; private set; }
+        public IMapGenerator MapGenerator { get; }
+        bool IsInitialized { get; set; }
 
         protected List<GameObject> gameObjects = new List<GameObject>();
 
@@ -27,14 +29,18 @@ namespace GameCore
         public static Random randomSingletone { get; } = new Random();
 
         /// <param name="size">размер игрового поля</param>
-        public Game(Size size)
+        public Game(IMap map, IMapGenerator mapGenerator)
+        {
+            Map = map;
+            MapGenerator = mapGenerator;
+        }
+
+        public void Initialize(Size size)
         {
             MapSize = size;
+            Map.Initialize(size);
 
-            IMap map = new MatrixMap();
-            map.Initialize(size);
-
-            Map = map;
+            IsInitialized = true;
         }
 
         /// <summary>
@@ -42,7 +48,10 @@ namespace GameCore
         /// </summary>
         public void Start()
         {
-            GenerateRandomMap();
+            if (!IsInitialized)
+                throw new Exception("Объект игры не проинициализирован");
+
+            Map = MapGenerator.Generate(MapSize);
             GenerateObjectsOnMap(400);
         }
 
@@ -64,18 +73,6 @@ namespace GameCore
                     created = new Animal(this);
 
                 gameObjects.Add(created);
-            }
-        }
-
-        void GenerateRandomMap()
-        {
-            for (int i = 0; i < MapSize.Height; i++)
-            {
-                for (int j = 0; j < MapSize.Width; j++)
-                {
-                    var type = (WorldCell.CellType)randomSingletone.Next(0, Enum.GetNames(typeof(WorldCell.CellType)).Length);
-                    Map[i, j] = new WorldCell(new Point(j, i), type);
-                }
             }
         }
 

@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.IO;
 using GameCore;
+using GameCore.GameServices.MapServices;
 using Microsoft.Extensions.Configuration;
 
 namespace LifeGame
@@ -16,7 +17,12 @@ namespace LifeGame
 
             MaximizeConsole();
 
-            var game = new Game(LoadGameSizeFromConfig());
+            IMap map = new MatrixMap();
+            IMapGenerator mapGenerator = new RandomMapGenerator(map, Game.randomSingletone);
+
+            var game = new Game(map, mapGenerator);
+
+            game.Initialize(LoadGameSizeFromConfig());
 
             game.Start();
 

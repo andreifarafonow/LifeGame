@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace GameCore.GameServices.MapServices
 {
-    class MatrixMap : IMap
+    public class MatrixMap : IMap
     {
         WorldCell[,] map;
 
