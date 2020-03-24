@@ -25,7 +25,8 @@ namespace LifeGame
 
             var game = new Game(mapGenerator, settlement);
 
-            game.Initialize(LoadGameSizeFromConfig());
+            game.Initialize(LoadGameSizeFromConfig(),
+                            LoadObjectsNumFromConfig());
 
             game.Start();
 
@@ -49,6 +50,11 @@ namespace LifeGame
         static Size LoadGameSizeFromConfig()
         {
             return new Size(int.Parse(configuration.GetSection("gameWidth").Value), int.Parse(configuration.GetSection("gameHeight").Value));
+        }
+
+        static int LoadObjectsNumFromConfig()
+        {
+            return int.Parse(configuration.GetSection("objectsNumber").Value);
         }
     }
 }

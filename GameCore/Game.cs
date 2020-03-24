@@ -14,11 +14,17 @@ namespace GameCore
         /// Карта игры
         /// </summary>
         public IMap Map { get; private set; }
-        public IMapGenerator MapGenerator { get; }
-        public ISettlement Settlement { get; }
+
+        /// <summary>
+        /// Генератор карты
+        /// </summary>
+        IMapGenerator MapGenerator { get; }
+
+        ISettlement Settlement { get; }
+
         bool IsInitialized { get; set; }
 
-        protected List<GameObject> gameObjects = new List<GameObject>();
+        List<GameObject> gameObjects = new List<GameObject>();
 
         /// <summary>
         /// Список объектов, размещённых на карте
@@ -30,7 +36,6 @@ namespace GameCore
 
         public static Random randomSingletone { get; } = new Random();
 
-
         public Game(IMapGenerator mapGenerator, ISettlement settlement)
         {
             MapGenerator = mapGenerator;
@@ -39,10 +44,13 @@ namespace GameCore
 
         Size Size { get; set; }
 
-        public void Initialize(Size size)
+        int ObjectsNumber { get; set; }
+
+        public void Initialize(Size size, int objectsNumber)
         {
             Size = size;
             IsInitialized = true;
+            ObjectsNumber = objectsNumber;
         }
 
         /// <summary>
@@ -54,7 +62,7 @@ namespace GameCore
                 throw new Exception("Объект игры не проинициализирован");
 
             Map = MapGenerator.Generate(Size);
-            Settlement.Populate(400, gameObjects);
+            Settlement.Populate(ObjectsNumber, gameObjects);
         }
     }
 
