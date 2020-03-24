@@ -29,8 +29,8 @@ namespace GameCore.GameEntities
 
             do
             {
-                x = Game.randomSingletone.Next(GameInstance.MapSize.Width);
-                y = Game.randomSingletone.Next(GameInstance.MapSize.Height);
+                x = Game.randomSingletone.Next(GameInstance.Map.Size.Width);
+                y = Game.randomSingletone.Next(GameInstance.Map.Size.Height);
 
                 Position = new Point(x, y);
             }

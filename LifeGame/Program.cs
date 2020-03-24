@@ -20,7 +20,7 @@ namespace LifeGame
             IMap map = new MatrixMap();
             IMapGenerator mapGenerator = new RandomMapGenerator(map, Game.randomSingletone);
 
-            var game = new Game(map, mapGenerator);
+            var game = new Game(mapGenerator);
 
             game.Initialize(LoadGameSizeFromConfig());
 

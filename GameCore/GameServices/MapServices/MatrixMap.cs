@@ -14,15 +14,8 @@ namespace GameCore.GameServices.MapServices
             set => map[y, x] = value; 
         }
 
-        /// <summary>
-        /// Размер игрового поля
-        /// </summary>
         public Size Size { get; private set; }
 
-        /// <summary>
-        /// Создание пустой карты заданных размеров
-        /// </summary>
-        /// <param name="size">Размер игрового поля</param>
         public void Initialize(Size size)
         {
             map = new WorldCell[size.Height, size.Width];

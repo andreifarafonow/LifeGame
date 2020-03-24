@@ -29,17 +29,16 @@ namespace GameCore
         public static Random randomSingletone { get; } = new Random();
 
         /// <param name="size">размер игрового поля</param>
-        public Game(IMap map, IMapGenerator mapGenerator)
+        public Game(IMapGenerator mapGenerator)
         {
-            Map = map;
             MapGenerator = mapGenerator;
         }
 
+        Size Size { get; set; }
+
         public void Initialize(Size size)
         {
-            MapSize = size;
-            Map.Initialize(size);
-
+            Size = size;
             IsInitialized = true;
         }
 
@@ -51,7 +50,7 @@ namespace GameCore
             if (!IsInitialized)
                 throw new Exception("Объект игры не проинициализирован");
 
-            Map = MapGenerator.Generate(MapSize);
+            Map = MapGenerator.Generate(Size);
             GenerateObjectsOnMap(400);
         }
 
@@ -75,11 +74,6 @@ namespace GameCore
                 gameObjects.Add(created);
             }
         }
-
-        /// <summary>
-        /// Размер игрового поля
-        /// </summary>
-        public Size MapSize { get; private set; }
     }
 
     

@@ -129,7 +129,7 @@ namespace GameCore.GameEntities
                 }
 
                 // Выход за пределы карты
-                if (currentX < 0 || currentY < 0 || currentX >= GameInstance.MapSize.Width || currentY >= GameInstance.MapSize.Height)
+                if (currentX < 0 || currentY < 0 || currentX >= GameInstance.Map.Size.Width || currentY >= GameInstance.Map.Size.Height)
                     return false;
 
                 bool collision = CollisionIn(new Point(currentX, currentY));
