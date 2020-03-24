@@ -164,33 +164,72 @@ namespace GameCore.GameEntities
             return possibleMovings[Game.randomSingletone.Next(possibleMovings.Length)];
         }
 
-        bool CheckMoveTo(int x, int y, MovingType movingType)
+        bool CollisionIn(int x, int y)
         {
-            throw new NotImplementedException();
-            // Выход за границы карты
-            if (x < 0 || y < 0 || x >= GameInstance.Width || y >= GameInstance.Height)
-                return false;
-            if (movingType == MovingType.Swim)
+            return GameInstance.GameObjects.Any(obj => obj.X == x && obj.Y == y && obj is SolidObject);
+        }
+
+        bool CheckMove(int fromX, int fromY, MovingDirection dir, int stepLength, MovingType movingType)
+        {
+            for (int i = 1; i <= stepLength; i++)
             {
-                if (GameInstance.Map[y, x].TypeOfCell == WorldCell.CellType.Ground)
+                int currentX = fromX, currentY = fromY;
+
+                switch (dir)
+                {
+                    case MovingDirection.Right:
+                        currentX = fromX + i;
+                        break;
+                    case MovingDirection.Down:
+                        currentY = currentY + i;
+                        break;
+                    case MovingDirection.Left:
+                        currentX = fromX - i;
+                        break;
+                    case MovingDirection.Up:
+                        currentY = fromY - i;
+                        break;
+                }
+
+                // Выход за пределы карты
+                if (currentX < 0 || currentY < 0 || currentX >= GameInstance.Width || currentY >= GameInstance.Height)
                     return false;
+
+                bool collision = CollisionIn(currentX, currentY);
+
+                if (movingType == MovingType.Swim)
+                {
+                    if (Map[currentY, currentX].TypeOfCell == WorldCell.CellType.Ground)
+                        return false;
+                    if (collision)
+                        return false;
+                }
+                else if (movingType == MovingType.Go)
+                {
+                    if (Map[currentY, currentX].TypeOfCell == WorldCell.CellType.Water)
+                        return false;
+                    if (collision)
+                        return false;
+                }
             }
+
+            return true;
         }
 
         protected override bool CanLocationAt()
         {
-            bool colilision = GameInstance.GameObjects.Any(obj => obj.X == X && obj.Y == Y && obj is SolidObject);
+            bool collision = CollisionIn(X, Y);
 
             var inCell = GameInstance.GameObjects.Where(obj => obj.X == X && obj.Y == Y);
 
             switch (TypeOfAnimal)
             {
                 case AnimalType.Fish:
-                    return Map[Y, X].TypeOfCell == WorldCell.CellType.Water && !colilision;
+                    return Map[Y, X].TypeOfCell == WorldCell.CellType.Water && !collision;
                 case AnimalType.Turtle:
-                    return !colilision;
+                    return !collision;
                 case AnimalType.Rabbit:
-                    return Map[Y, X].TypeOfCell == WorldCell.CellType.Ground && !colilision;
+                    return Map[Y, X].TypeOfCell == WorldCell.CellType.Ground && !collision;
                 default:
                     return true;
             }

@@ -16,7 +16,5 @@ namespace LifeGame
 
             GameDisplayer.Display(game);
         }
-
-        
     }
 }
