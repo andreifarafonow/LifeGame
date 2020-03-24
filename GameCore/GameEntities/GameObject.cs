@@ -1,4 +1,6 @@
-﻿namespace GameCore.GameEntities
+﻿using System.Drawing;
+
+namespace GameCore.GameEntities
 {
     public abstract class GameObject
     {
@@ -22,10 +24,14 @@
         /// </summary>
         protected void StartPositionSet()
         {
+            int x, y;
+
             do
             {
-                X = Game.randomSingletone.Next(GameInstance.Width);
-                Y = Game.randomSingletone.Next(GameInstance.Height);
+                x = Game.randomSingletone.Next(GameInstance.Width);
+                y = Game.randomSingletone.Next(GameInstance.Height);
+
+                Position = new Point(x, y);
             }
             while (!CanLocationAt());
         }
@@ -45,14 +51,9 @@
         public int Id { get; }
 
         /// <summary>
-        /// Номер столбца карты в котором находится объект
+        /// Позиция объекта
         /// </summary>
-        public int X { get; set; }
-
-        /// <summary>
-        /// Номер строки карты в котором находится объект
-        /// </summary>
-        public int Y { get; set; }
+        public Point Position { get; private set; }
 
         /// <summary>
         /// Экземпляр игры, в которой существует игровой объект

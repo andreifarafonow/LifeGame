@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Drawing;
 using GameCore.GameEntities;
 
 namespace GameCore
@@ -76,7 +77,7 @@ namespace GameCore
                 for (int j = 0; j < Width; j++)
                 {
                     var type = (WorldCell.CellType)randomSingletone.Next(0, Enum.GetNames(typeof(WorldCell.CellType)).Length);
-                    map[i, j] = new WorldCell(i, j, type);
+                    map[i, j] = new WorldCell(new Point(i, j), type);
                 }
             }
         }

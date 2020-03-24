@@ -2,6 +2,7 @@
 using GameCore.GameEntities;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace LifeGame
@@ -39,7 +40,7 @@ namespace LifeGame
             foreach (var obj in objects)
             {
                 string name = obj.ToString();
-                Console.SetCursorPosition(gridLeftMargin + obj.X * cellWidth + 4 - name.Length / 2, gridTopMargin + obj.Y * cellHeight + 2 - offset);
+                Console.SetCursorPosition(gridLeftMargin + obj.Position.X * cellWidth + 4 - name.Length / 2, gridTopMargin + obj.Position.Y * cellHeight + 2 - offset);
                 Console.Write(name);
 
                 if (offset <= 0)
@@ -59,7 +60,7 @@ namespace LifeGame
 
                     DrawCellBackground(x, y, ground);
 
-                    var objectsOnThisCell = game.GameObjects.Where(obj => obj.X == x && obj.Y == y);
+                    var objectsOnThisCell = game.GameObjects.Where(obj => obj.Position == new Point(x, y));
 
                     Console.ForegroundColor = ConsoleColor.Black;
 

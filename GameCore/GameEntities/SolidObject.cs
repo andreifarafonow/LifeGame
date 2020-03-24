@@ -23,7 +23,7 @@ namespace GameCore.GameEntities
                 case SolidObjectType.Stone:
                     return true;
                 case SolidObjectType.Tree:
-                    return GameInstance.Map[Y, X].TypeOfCell == WorldCell.CellType.Ground;
+                    return GameInstance.Map[Position.Y, Position.X].TypeOfCell == WorldCell.CellType.Ground;
                 default:
                     return false;
             }

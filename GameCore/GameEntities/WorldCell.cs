@@ -1,4 +1,6 @@
-﻿namespace GameCore.GameEntities
+﻿using System.Drawing;
+
+namespace GameCore.GameEntities
 {
     /// <summary>
     /// Класс ячейки мира.
@@ -8,30 +10,22 @@
         /// <summary>
         /// Создаёт новую ячейку мира по заданным координатам
         /// </summary>
-        /// <param name="xPos">Номер столбца в котором содержится ячейка</param>
-        /// <param name="yPos">Номер строки в котором содержится ячейка</param>
-        public WorldCell(int xPos, int yPos, CellType type)
+        /// <param name="position">Номер строки и столбца в котором содержится ячейка</param>
+        public WorldCell(Point position, CellType type)
         {
-            Y = yPos;
-            X = xPos;
+            Position = position;
             TypeOfCell = type;
         }
 
         /// <summary>
-        /// Номер столбца в котором содержится ячейка
+        /// Позиция ячейки
         /// </summary>
-        public int X { get; private set; }
-
-        /// <summary>
-        /// Номер строки в котором содержится ячейка
-        /// </summary>
-        public int Y { get; private set; }
+        public Point Position { get; private set; }
 
         /// <summary>
         /// Тип ячейки
         /// </summary>
-        public CellType TypeOfCell
-        { get; set; }
+        public CellType TypeOfCell { get; set; }
 
         public enum CellType
         {

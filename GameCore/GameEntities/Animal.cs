@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace GameCore.GameEntities
@@ -99,9 +101,9 @@ namespace GameCore.GameEntities
             return possibleMovings[Game.randomSingletone.Next(possibleMovings.Length)];
         }
 
-        bool CollisionIn(int x, int y)
+        bool CollisionIn(Point point)
         {
-            return GameInstance.GameObjects.Any(obj => obj.X == x && obj.Y == y && obj is SolidObject);
+            return GameInstance.GameObjects.OfType<SolidObject>().Any(obj => obj.Position == point);
         }
 
         bool CheckMove(int fromX, int fromY, MovingDirection dir, int stepLength, MovingType movingType)
@@ -130,7 +132,7 @@ namespace GameCore.GameEntities
                 if (currentX < 0 || currentY < 0 || currentX >= GameInstance.Width || currentY >= GameInstance.Height)
                     return false;
 
-                bool collision = CollisionIn(currentX, currentY);
+                bool collision = CollisionIn(new Point(currentX, currentY));
 
                 if (movingType == MovingType.Swim)
                 {
@@ -153,40 +155,35 @@ namespace GameCore.GameEntities
 
         protected override bool CanLocationAt()
         {
-            bool collision = CollisionIn(X, Y);
+            bool collision = CollisionIn(Position);
 
-            var inCell = GameInstance.GameObjects.Where(obj => obj.X == X && obj.Y == Y);
+            var inCell = GameInstance.GameObjects.Where(obj => obj.Position == Position);
 
             switch (TypeOfAnimal)
             {
                 case AnimalType.Fish:
-                    return Map[Y, X].TypeOfCell == WorldCell.CellType.Water && !collision;
+                    return Map[Position.Y, Position.X].TypeOfCell == WorldCell.CellType.Water && !collision;
                 case AnimalType.Turtle:
                     return !collision;
                 case AnimalType.Rabbit:
-                    return Map[Y, X].TypeOfCell == WorldCell.CellType.Ground && !collision;
+                    return Map[Position.Y, Position.X].TypeOfCell == WorldCell.CellType.Ground && !collision;
                 default:
                     return true;
             }
         }
 
+        Dictionary<AnimalType, string> animalNames = new Dictionary<AnimalType, string>() 
+        {
+            { AnimalType.Duck, "Утка" },
+            { AnimalType.Fish, "Рыба" },
+            { AnimalType.Rabbit, "Кролик" },
+            { AnimalType.Sparrow, "Воробей" },
+            { AnimalType.Turtle, "Черепаха" }
+        };
+
         public override string ToString()
         {
-            switch (TypeOfAnimal)
-            {
-                case AnimalType.Duck:
-                    return "Утка";
-                case AnimalType.Fish:
-                    return "Рыба";
-                case AnimalType.Rabbit:
-                    return "Кролик";
-                case AnimalType.Sparrow:
-                    return "Воробей";
-                case AnimalType.Turtle:
-                    return "Черепаха";
-                default:
-                    return "---";
-            }
+            return animalNames[TypeOfAnimal];
         }
     }
 }
