@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using GameCore.GameServices.MapServices;
+using System.Drawing;
 
 namespace GameCore.GameEntities
 {
@@ -63,6 +64,6 @@ namespace GameCore.GameEntities
         /// <summary>
         /// Карта игры
         /// </summary>
-        protected WorldCell[,] Map { get; }
+        protected IMap Map { get; }
     }
 }

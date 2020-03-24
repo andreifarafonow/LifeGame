@@ -52,9 +52,9 @@ namespace LifeGame
 
         public static void Display(Game game)
         {
-            for (int y = 0; y < game.Map.GetLength(0); y++)
+            for (int y = 0; y < game.Map.Size.Height; y++)
             {
-                for (int x = 0; x < game.Map.GetLength(1); x++)
+                for (int x = 0; x < game.Map.Size.Width; x++)
                 {
                     bool ground = game.Map[y, x].TypeOfCell == WorldCell.CellType.Ground;
 

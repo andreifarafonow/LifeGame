@@ -3,20 +3,16 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Drawing;
 using GameCore.GameEntities;
+using GameCore.GameServices.MapServices;
 
 namespace GameCore
 {
     public class Game
     {
-        WorldCell[,] map;
-
         /// <summary>
         /// Карта игры
         /// </summary>
-        public WorldCell[,] Map
-        {
-            get => (WorldCell[,])map.Clone(); 
-        }
+        public IMap Map { get; private set; }
 
         protected List<GameObject> gameObjects = new List<GameObject>();
 
@@ -35,7 +31,10 @@ namespace GameCore
         {
             MapSize = size;
 
-            map = new WorldCell[size.Height, size.Width];
+            IMap map = new MatrixMap();
+            map.Initialize(size);
+
+            Map = map;
         }
 
         /// <summary>
@@ -75,7 +74,7 @@ namespace GameCore
                 for (int j = 0; j < MapSize.Width; j++)
                 {
                     var type = (WorldCell.CellType)randomSingletone.Next(0, Enum.GetNames(typeof(WorldCell.CellType)).Length);
-                    map[i, j] = new WorldCell(new Point(j, i), type);
+                    Map[i, j] = new WorldCell(new Point(j, i), type);
                 }
             }
         }
