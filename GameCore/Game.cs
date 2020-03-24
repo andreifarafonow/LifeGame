@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Drawing;
 using GameCore.GameEntities;
 using GameCore.GameServices.MapServices;
+using GameCore.GameServices.ObjectsServices;
 
 namespace GameCore
 {
@@ -14,6 +15,7 @@ namespace GameCore
         /// </summary>
         public IMap Map { get; private set; }
         public IMapGenerator MapGenerator { get; }
+        public ISettlement Settlement { get; }
         bool IsInitialized { get; set; }
 
         protected List<GameObject> gameObjects = new List<GameObject>();
@@ -28,10 +30,11 @@ namespace GameCore
 
         public static Random randomSingletone { get; } = new Random();
 
-        /// <param name="size">размер игрового поля</param>
-        public Game(IMapGenerator mapGenerator)
+
+        public Game(IMapGenerator mapGenerator, ISettlement settlement)
         {
             MapGenerator = mapGenerator;
+            Settlement = settlement;
         }
 
         Size Size { get; set; }
@@ -51,28 +54,7 @@ namespace GameCore
                 throw new Exception("Объект игры не проинициализирован");
 
             Map = MapGenerator.Generate(Size);
-            GenerateObjectsOnMap(400);
-        }
-
-        /// <summary>
-        /// Расставляет объекты на карте случайным образом
-        /// </summary>
-        /// <param name="num">Кол-во объектов для расстановки</param>
-        private void GenerateObjectsOnMap(int num)
-        {
-            int solidCount = randomSingletone.Next(num);
-
-            for (int i = 0; i < num; i++)
-            {
-                GameObject created;
-
-                if (i < solidCount)
-                    created = new SolidObject(this);
-                else
-                    created = new Animal(this);
-
-                gameObjects.Add(created);
-            }
+            Settlement.Populate(400, gameObjects);
         }
     }
 

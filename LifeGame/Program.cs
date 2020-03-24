@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using GameCore;
 using GameCore.GameServices.MapServices;
+using GameCore.GameServices.ObjectsServices;
 using Microsoft.Extensions.Configuration;
 
 namespace LifeGame
@@ -20,7 +21,9 @@ namespace LifeGame
             IMap map = new MatrixMap();
             IMapGenerator mapGenerator = new RandomMapGenerator(map, Game.randomSingletone);
 
-            var game = new Game(mapGenerator);
+            ISettlement settlement = new RandomSettlement(map, Game.randomSingletone);
+
+            var game = new Game(mapGenerator, settlement);
 
             game.Initialize(LoadGameSizeFromConfig());
 

@@ -10,13 +10,11 @@ namespace GameCore.GameEntities
     /// </summary>
     class Animal : GameObject
     {
-        public Animal(Game game) : base(game)
+        public Animal()
         {
             TypeOfAnimal = (AnimalType)Game.randomSingletone.Next(Enum.GetNames(typeof(AnimalType)).Length);
 
             Speed = SpeedOfType(TypeOfAnimal);
-
-            StartPositionSet();
         }
 
         private static int SpeedOfType(AnimalType type)
@@ -101,12 +99,7 @@ namespace GameCore.GameEntities
             return possibleMovings[Game.randomSingletone.Next(possibleMovings.Length)];
         }
 
-        bool CollisionIn(Point point)
-        {
-            return GameInstance.GameObjects.OfType<SolidObject>().Any(obj => obj.Position == point);
-        }
-
-        bool CheckMove(int fromX, int fromY, MovingDirection dir, int stepLength, MovingType movingType)
+        /*bool CheckMove(int fromX, int fromY, MovingDirection dir, int stepLength, MovingType movingType)
         {
             for (int i = 1; i <= stepLength; i++)
             {
@@ -151,22 +144,20 @@ namespace GameCore.GameEntities
             }
 
             return true;
-        }
+        }*/
 
-        protected override bool CanLocationAt()
+        public override bool CanLocationAt(WorldCell cell, IEnumerable<GameObject> neighbors)
         {
-            bool collision = CollisionIn(Position);
-
-            var inCell = GameInstance.GameObjects.Where(obj => obj.Position == Position);
+            bool collision = neighbors.Any(obj => obj is SolidObject);
 
             switch (TypeOfAnimal)
             {
                 case AnimalType.Fish:
-                    return Map[Position.Y, Position.X].TypeOfCell == WorldCell.CellType.Water && !collision;
+                    return cell.TypeOfCell == WorldCell.CellType.Water && !collision;
                 case AnimalType.Turtle:
                     return !collision;
                 case AnimalType.Rabbit:
-                    return Map[Position.Y, Position.X].TypeOfCell == WorldCell.CellType.Ground && !collision;
+                    return cell.TypeOfCell == WorldCell.CellType.Ground && !collision;
                 default:
                     return true;
             }

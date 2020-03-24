@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace GameCore.GameEntities
 {
@@ -7,27 +8,12 @@ namespace GameCore.GameEntities
     /// </summary>
     class SolidObject : GameObject
     {
-        public SolidObject(Game game) : base(game)
+        public SolidObject()
         {
             TypeOfSolid = (SolidObjectType)Game.randomSingletone.Next(Enum.GetNames(typeof(SolidObjectType)).Length);
-
-            StartPositionSet();
         }
 
         public SolidObjectType TypeOfSolid { get; private set; }
-
-        protected override bool CanLocationAt()
-        {
-            switch (TypeOfSolid)
-            {
-                case SolidObjectType.Stone:
-                    return true;
-                case SolidObjectType.Tree:
-                    return GameInstance.Map[Position.Y, Position.X].TypeOfCell == WorldCell.CellType.Ground;
-                default:
-                    return false;
-            }
-        }
 
         public enum SolidObjectType
         {
@@ -45,6 +31,19 @@ namespace GameCore.GameEntities
                     return "Дерево";
                 default:
                     return "---";
+            }
+        }
+
+        public override bool CanLocationAt(WorldCell cell, IEnumerable<GameObject> neighbors)
+        {
+            switch (TypeOfSolid)
+            {
+                case SolidObjectType.Stone:
+                    return true;
+                case SolidObjectType.Tree:
+                    return cell.TypeOfCell == WorldCell.CellType.Ground;
+                default:
+                    throw new Exception();
             }
         }
     }
