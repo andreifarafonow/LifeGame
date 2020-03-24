@@ -30,14 +30,12 @@ namespace GameCore
 
         public static Random randomSingletone { get; } = new Random();
 
-        /// <param name="N">Высота игрового поля</param>
-        /// <param name="M">Ширина игрового поля</param>
-        public Game(int n, int m)
+        /// <param name="size">размер игрового поля</param>
+        public Game(Size size)
         {
-            Height = n;
-            Width = m;
+            MapSize = size;
 
-            map = new WorldCell[n, m];
+            map = new WorldCell[size.Height, size.Width];
         }
 
         /// <summary>
@@ -72,25 +70,20 @@ namespace GameCore
 
         void GenerateRandomMap()
         {
-            for (int i = 0; i < Height; i++)
+            for (int i = 0; i < MapSize.Height; i++)
             {
-                for (int j = 0; j < Width; j++)
+                for (int j = 0; j < MapSize.Width; j++)
                 {
                     var type = (WorldCell.CellType)randomSingletone.Next(0, Enum.GetNames(typeof(WorldCell.CellType)).Length);
-                    map[i, j] = new WorldCell(new Point(i, j), type);
+                    map[i, j] = new WorldCell(new Point(j, i), type);
                 }
             }
         }
 
         /// <summary>
-        /// Высота игрового поля
+        /// Размер игрового поля
         /// </summary>
-        public int Height { get; private set; }
-
-        /// <summary>
-        /// Ширина игрового поля
-        /// </summary>
-        public int Width { get; private set; }
+        public Size MapSize { get; private set; }
     }
 
     

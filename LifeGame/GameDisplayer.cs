@@ -77,7 +77,7 @@ namespace LifeGame
 
             Console.ResetColor();
 
-            Console.SetCursorPosition(0, game.Height * cellHeight + gridTopMargin + 1);
+            Console.SetCursorPosition(0, game.MapSize.Height * cellHeight + gridTopMargin + 1);
         }
     }
 }

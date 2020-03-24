@@ -28,8 +28,8 @@ namespace GameCore.GameEntities
 
             do
             {
-                x = Game.randomSingletone.Next(GameInstance.Width);
-                y = Game.randomSingletone.Next(GameInstance.Height);
+                x = Game.randomSingletone.Next(GameInstance.MapSize.Width);
+                y = Game.randomSingletone.Next(GameInstance.MapSize.Height);
 
                 Position = new Point(x, y);
             }
