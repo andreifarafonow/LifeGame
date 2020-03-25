@@ -1,90 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
+﻿using GameCore.GameEntities;
+using GameCore.GameServices.MapServices;
+using GameCore.GameServices.ObjectsServices;
+using Ninject;
+using System;
 using System.Drawing;
-using GameCore.GameEntities;
 
 namespace GameCore
 {
     public class Game
     {
-        WorldCell[,] map;
-
-        /// <summary>
-        /// Карта игры
-        /// </summary>
-        public WorldCell[,] Map
-        {
-            get => (WorldCell[,])map.Clone(); 
-        }
-
-        protected List<GameObject> gameObjects = new List<GameObject>();
+        public IMap Map { get => _gameManager.Map; }
 
         /// <summary>
         /// Список объектов, размещённых на карте
         /// </summary>
-        public GameObject[] GameObjects 
+        public GameObject[] GameObjects { get => _gameManager.GameObjects; }
+        public Size Size { get; }
+        public int ObjectsNumber { get; }
+
+        GameManager _gameManager;
+
+        public Game(Size size, int objectsNumber)
         {
-            get => gameObjects.ToArray();
+            NinjectContext.SetUp(new ProductionNinjectConfig());
+
+            _gameManager = NinjectContext.Kernel.Get<GameManager>();
+
+            Size = size;
+            ObjectsNumber = objectsNumber;
         }
 
-        public static Random randomSingletone { get; } = new Random();
-
-        /// <param name="size">размер игрового поля</param>
-        public Game(Size size)
-        {
-            MapSize = size;
-
-            map = new WorldCell[size.Height, size.Width];
-        }
-
-        /// <summary>
-        /// Запускает игру
-        /// </summary>
         public void Start()
         {
-            GenerateRandomMap();
-            GenerateObjectsOnMap(400);
+            _gameManager.Initialize(Size, ObjectsNumber);
         }
-
-        /// <summary>
-        /// Расставляет объекты на карте случайным образом
-        /// </summary>
-        /// <param name="num">Кол-во объектов для расстановки</param>
-        private void GenerateObjectsOnMap(int num)
-        {
-            int solidCount = randomSingletone.Next(num);
-
-            for (int i = 0; i < num; i++)
-            {
-                GameObject created;
-
-                if (i < solidCount)
-                    created = new SolidObject(this);
-                else
-                    created = new Animal(this);
-
-                gameObjects.Add(created);
-            }
-        }
-
-        void GenerateRandomMap()
-        {
-            for (int i = 0; i < MapSize.Height; i++)
-            {
-                for (int j = 0; j < MapSize.Width; j++)
-                {
-                    var type = (WorldCell.CellType)randomSingletone.Next(0, Enum.GetNames(typeof(WorldCell.CellType)).Length);
-                    map[i, j] = new WorldCell(new Point(j, i), type);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Размер игрового поля
-        /// </summary>
-        public Size MapSize { get; private set; }
     }
-
-    
 }

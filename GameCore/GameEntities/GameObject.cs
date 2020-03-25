@@ -1,49 +1,25 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace GameCore.GameEntities
 {
     public abstract class GameObject
     {
-        static int LastId { get; set; }
-
-
-        /// <summary>
-        /// Конструирует новый игровой объект
-        /// </summary>
-        /// <param name="game">Объект игры</param>
-        protected GameObject(Game game)
+        public GameObject(Random random)
         {
-            GameInstance = game;
-            Map = game.Map;
-
-            Id = ++LastId;
+            Random = random;
         }
 
-        /// <summary>
-        /// Начальное позиционирование объекта на карте в случайной, свойственной для него позиции
-        /// </summary>
-        protected void StartPositionSet()
-        {
-            int x, y;
-
-            do
-            {
-                x = Game.randomSingletone.Next(GameInstance.MapSize.Width);
-                y = Game.randomSingletone.Next(GameInstance.MapSize.Height);
-
-                Position = new Point(x, y);
-            }
-            while (!CanLocationAt());
-        }
+        public delegate bool СanBeLocatedDelegate(WorldCell cell, bool collision);
 
         /// <summary>
-        /// Возвращает возможность позиционирования объекта в данных координатах
+        /// Возвращает возможность объекта занимать данную ячейку, а также соседничать с другими объектами, находящимися в данной ячейке
         /// </summary>
-        /// <param name="map">Карта игры</param>
-        /// <param name="x">Позиция объекта по X</param>
-        /// <param name="y">Позиция объекта по Y</param>
+        /// <param name="cell">Ячейка мира</param>
+        /// <param name="neighbors">Соседи</param>
         /// <returns></returns>
-        protected abstract bool CanLocationAt();
+        public abstract bool СanBeLocatedAt(WorldCell cell, IEnumerable<GameObject> neighbors);
 
         /// <summary>
         /// Идентификатор объекта
@@ -53,16 +29,7 @@ namespace GameCore.GameEntities
         /// <summary>
         /// Позиция объекта
         /// </summary>
-        public Point Position { get; private set; }
-
-        /// <summary>
-        /// Экземпляр игры, в которой существует игровой объект
-        /// </summary>
-        protected Game GameInstance { get; }
-
-        /// <summary>
-        /// Карта игры
-        /// </summary>
-        protected WorldCell[,] Map { get; }
+        public Point Position { get; set; }
+        public Random Random { get; }
     }
 }

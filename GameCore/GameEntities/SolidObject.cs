@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace GameCore.GameEntities
 {
@@ -7,27 +8,12 @@ namespace GameCore.GameEntities
     /// </summary>
     class SolidObject : GameObject
     {
-        public SolidObject(Game game) : base(game)
+        public SolidObject(Random random) : base(random)
         {
-            TypeOfSolid = (SolidObjectType)Game.randomSingletone.Next(Enum.GetNames(typeof(SolidObjectType)).Length);
-
-            StartPositionSet();
+            TypeOfSolid = (SolidObjectType)Random.Next(Enum.GetNames(typeof(SolidObjectType)).Length);
         }
 
         public SolidObjectType TypeOfSolid { get; private set; }
-
-        protected override bool CanLocationAt()
-        {
-            switch (TypeOfSolid)
-            {
-                case SolidObjectType.Stone:
-                    return true;
-                case SolidObjectType.Tree:
-                    return GameInstance.Map[Position.Y, Position.X].TypeOfCell == WorldCell.CellType.Ground;
-                default:
-                    return false;
-            }
-        }
 
         public enum SolidObjectType
         {
@@ -35,17 +21,33 @@ namespace GameCore.GameEntities
             Tree
         }
 
+        static Dictionary<SolidObjectType, (string name, СanBeLocatedDelegate placementСondition)> solidTypeData = new Dictionary<SolidObjectType, (string name, СanBeLocatedDelegate placementСondition)>()
+        {
+            { 
+                SolidObjectType.Stone, 
+                (
+                    "Камень",
+                    (cell, collision) => true
+                )
+            },
+
+            {
+                SolidObjectType.Tree, 
+                (
+                    "Дерево",
+                    (cell, collision) => cell.TypeOfCell == WorldCell.CellType.Ground
+                )
+            }
+        };
+
         public override string ToString()
         {
-            switch (TypeOfSolid)
-            {
-                case SolidObjectType.Stone:
-                    return "Камень";
-                case SolidObjectType.Tree:
-                    return "Дерево";
-                default:
-                    return "---";
-            }
+            return solidTypeData[TypeOfSolid].name;
+        }
+
+        public override bool СanBeLocatedAt(WorldCell cell, IEnumerable<GameObject> neighbors)
+        {
+            return solidTypeData[TypeOfSolid].placementСondition(cell, false);
         }
     }
 }

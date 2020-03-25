@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 
 namespace GameCore.GameEntities
@@ -10,37 +9,80 @@ namespace GameCore.GameEntities
     /// </summary>
     class Animal : GameObject
     {
-        public Animal(Game game) : base(game)
+        public Animal(Random random) : base (random)
         {
-            TypeOfAnimal = (AnimalType)Game.randomSingletone.Next(Enum.GetNames(typeof(AnimalType)).Length);
-
-            Speed = SpeedOfType(TypeOfAnimal);
-
-            StartPositionSet();
+            TypeOfAnimal = (AnimalType)random.Next(Enum.GetNames(typeof(AnimalType)).Length);
         }
 
-        private static int SpeedOfType(AnimalType type)
+        static Dictionary<AnimalType, (int speed, MovingType[] possibleMovings, string name, СanBeLocatedDelegate placementСondition)> animalTypeData = new Dictionary<AnimalType, (int speed, MovingType[] possibleMovings, string name, СanBeLocatedDelegate placementСondition)>()
         {
-            switch (type)
             {
-                case AnimalType.Fish:
-                    return 1;
-                case AnimalType.Duck:
-                    return 2;
-                case AnimalType.Rabbit:
-                    return 3;
-                case AnimalType.Turtle:
-                    return 1;
-                case AnimalType.Sparrow:
-                    return 4;
-                default:
-                    return 0;
+                AnimalType.Duck,
+                (
+                    2,
+                    new MovingType[]
+                    {
+                        MovingType.Swim, MovingType.Fly, MovingType.Go
+                    },
+                    "Утка",
+                    (cell, collision) => true
+                ) 
+            },
+
+            {
+                AnimalType.Fish,
+                (
+                    1,
+                    new MovingType[]
+                    {
+                        MovingType.Swim 
+                    },
+                    "Рыба",
+                    (cell, collision) => cell.TypeOfCell == WorldCell.CellType.Water && !collision
+                )
+            },
+
+            {
+                AnimalType.Rabbit,
+                (
+                    3,
+                    new MovingType[]
+                    {
+                        MovingType.Go
+                    },
+                    "Кролик",
+                    (cell, collision) => cell.TypeOfCell == WorldCell.CellType.Ground && !collision
+                )
+            },
+
+            {
+                AnimalType.Sparrow,
+                (
+                    4,
+                    new MovingType[]
+                    {
+                        MovingType.Fly, MovingType.Go
+                    },
+                    "Воробей",
+                    (cell, collision) => true
+                )
+            },
+
+            {
+                AnimalType.Turtle,
+                (
+                    1,
+                    new MovingType[]
+                    {
+                        MovingType.Swim, MovingType.Go
+                    },
+                    "Черепаха",
+                    (cell, collision) => !collision
+                )
             }
-        }
+        };
 
         public AnimalType TypeOfAnimal { get; private set; }
-
-        int Speed { get; }
 
         public enum AnimalType
         {
@@ -77,36 +119,12 @@ namespace GameCore.GameEntities
 
         MovingType RandomPossibleMovingType()
         {
-            MovingType[] possibleMovings = null;
+            MovingType[] possibleMovings = animalTypeData[TypeOfAnimal].possibleMovings;
 
-            switch (TypeOfAnimal)
-            {
-                case AnimalType.Fish:
-                    possibleMovings = new MovingType[]{ MovingType.Swim };
-                    break;
-                case AnimalType.Duck:
-                    possibleMovings = new MovingType[] { MovingType.Swim, MovingType.Fly, MovingType.Go };
-                    break;
-                case AnimalType.Sparrow:
-                    possibleMovings = new MovingType[] { MovingType.Fly, MovingType.Go };
-                    break;
-                case AnimalType.Turtle:
-                    possibleMovings = new MovingType[] { MovingType.Swim, MovingType.Go };
-                    break;
-                case AnimalType.Rabbit:
-                    possibleMovings = new MovingType[] { MovingType.Go };
-                    break;
-            }
-
-            return possibleMovings[Game.randomSingletone.Next(possibleMovings.Length)];
+            return possibleMovings[Random.Next(possibleMovings.Length)];
         }
 
-        bool CollisionIn(Point point)
-        {
-            return GameInstance.GameObjects.OfType<SolidObject>().Any(obj => obj.Position == point);
-        }
-
-        bool CheckMove(int fromX, int fromY, MovingDirection dir, int stepLength, MovingType movingType)
+        /*bool CheckMove(int fromX, int fromY, MovingDirection dir, int stepLength, MovingType movingType)
         {
             for (int i = 1; i <= stepLength; i++)
             {
@@ -129,7 +147,7 @@ namespace GameCore.GameEntities
                 }
 
                 // Выход за пределы карты
-                if (currentX < 0 || currentY < 0 || currentX >= GameInstance.MapSize.Width || currentY >= GameInstance.MapSize.Height)
+                if (currentX < 0 || currentY < 0 || currentX >= GameInstance.Map.Size.Width || currentY >= GameInstance.Map.Size.Height)
                     return false;
 
                 bool collision = CollisionIn(new Point(currentX, currentY));
@@ -151,39 +169,17 @@ namespace GameCore.GameEntities
             }
 
             return true;
-        }
+        }*/
 
-        protected override bool CanLocationAt()
+        public override bool СanBeLocatedAt(WorldCell cell, IEnumerable<GameObject> neighbors)
         {
-            bool collision = CollisionIn(Position);
+            bool collision = neighbors.Any(obj => obj is SolidObject);
 
-            var inCell = GameInstance.GameObjects.Where(obj => obj.Position == Position);
-
-            switch (TypeOfAnimal)
-            {
-                case AnimalType.Fish:
-                    return Map[Position.Y, Position.X].TypeOfCell == WorldCell.CellType.Water && !collision;
-                case AnimalType.Turtle:
-                    return !collision;
-                case AnimalType.Rabbit:
-                    return Map[Position.Y, Position.X].TypeOfCell == WorldCell.CellType.Ground && !collision;
-                default:
-                    return true;
-            }
+            return animalTypeData[TypeOfAnimal].placementСondition(cell, collision);
         }
-
-        Dictionary<AnimalType, string> animalNames = new Dictionary<AnimalType, string>() 
-        {
-            { AnimalType.Duck, "Утка" },
-            { AnimalType.Fish, "Рыба" },
-            { AnimalType.Rabbit, "Кролик" },
-            { AnimalType.Sparrow, "Воробей" },
-            { AnimalType.Turtle, "Черепаха" }
-        };
-
         public override string ToString()
         {
-            return animalNames[TypeOfAnimal];
+            return animalTypeData[TypeOfAnimal].name;
         }
     }
 }

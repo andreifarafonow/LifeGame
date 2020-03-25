@@ -5,16 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="coresettings.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="coresettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="Ninject" Version="3.3.4" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
   </ItemGroup>
 
