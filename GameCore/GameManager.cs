@@ -8,7 +8,7 @@ using GameCore.GameServices.ObjectsServices;
 
 namespace GameCore
 {
-    public class GameManager
+    class GameManager
     {
         /// <summary>
         /// Карта игры
