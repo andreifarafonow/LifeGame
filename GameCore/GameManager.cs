@@ -8,7 +8,7 @@ using GameCore.GameServices.ObjectsServices;
 
 namespace GameCore
 {
-    public class Game
+    public class GameManager
     {
         /// <summary>
         /// Карта игры
@@ -36,7 +36,7 @@ namespace GameCore
 
         public static Random randomSingletone { get; } = new Random();
 
-        public Game(IMapGenerator mapGenerator, ISettlement settlement)
+        public GameManager(IMapGenerator mapGenerator, ISettlement settlement)
         {
             MapGenerator = mapGenerator;
             Settlement = settlement;
