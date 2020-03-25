@@ -10,7 +10,7 @@ namespace LifeGame
     {
         static IConfigurationRoot configuration;
 
-        static void Main(string[] args)
+        static void Main()
         {
             configuration = BuildConfiguration();
 
