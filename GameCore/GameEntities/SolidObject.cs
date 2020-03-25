@@ -21,28 +21,33 @@ namespace GameCore.GameEntities
             Tree
         }
 
-        static Dictionary<SolidObjectType, string> solidObjectNames = new Dictionary<SolidObjectType, string>()
+        static Dictionary<SolidObjectType, (string name, СanBeLocatedDelegate placementСondition)> solidTypeData = new Dictionary<SolidObjectType, (string name, СanBeLocatedDelegate placementСondition)>()
         {
-            { SolidObjectType.Stone, "Камень" },
-            { SolidObjectType.Tree, "Дерево" }
+            { 
+                SolidObjectType.Stone, 
+                (
+                    "Камень",
+                    (cell, collision) => true
+                )
+            },
+
+            {
+                SolidObjectType.Tree, 
+                (
+                    "Дерево",
+                    (cell, collision) => cell.TypeOfCell == WorldCell.CellType.Ground
+                )
+            }
         };
 
         public override string ToString()
         {
-            return solidObjectNames[TypeOfSolid];
+            return solidTypeData[TypeOfSolid].name;
         }
 
         public override bool СanBeLocatedAt(WorldCell cell, IEnumerable<GameObject> neighbors)
         {
-            switch (TypeOfSolid)
-            {
-                case SolidObjectType.Stone:
-                    return true;
-                case SolidObjectType.Tree:
-                    return cell.TypeOfCell == WorldCell.CellType.Ground;
-                default:
-                    throw new Exception();
-            }
+            return solidTypeData[TypeOfSolid].placementСondition(cell, false);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace GameCore.GameEntities
             TypeOfAnimal = (AnimalType)Game.randomSingletone.Next(Enum.GetNames(typeof(AnimalType)).Length);
         }
 
-        static Dictionary<AnimalType, (int Speed, MovingType[] PossibleMovings, string Name, СanBeLocatedDelegate PlacementСondition)> animalTypeData = new Dictionary<AnimalType, (int Speed, MovingType[] PossibleMovings, string Name, СanBeLocatedDelegate PlacementСondition)>()
+        static Dictionary<AnimalType, (int speed, MovingType[] possibleMovings, string name, СanBeLocatedDelegate placementСondition)> animalTypeData = new Dictionary<AnimalType, (int speed, MovingType[] possibleMovings, string name, СanBeLocatedDelegate placementСondition)>()
         {
             {
                 AnimalType.Duck,
@@ -119,7 +119,7 @@ namespace GameCore.GameEntities
 
         MovingType RandomPossibleMovingType()
         {
-            MovingType[] possibleMovings = animalTypeData[TypeOfAnimal].PossibleMovings;
+            MovingType[] possibleMovings = animalTypeData[TypeOfAnimal].possibleMovings;
 
             return possibleMovings[Game.randomSingletone.Next(possibleMovings.Length)];
         }
@@ -175,11 +175,11 @@ namespace GameCore.GameEntities
         {
             bool collision = neighbors.Any(obj => obj is SolidObject);
 
-            return animalTypeData[TypeOfAnimal].PlacementСondition(cell, collision);
+            return animalTypeData[TypeOfAnimal].placementСondition(cell, collision);
         }
         public override string ToString()
         {
-            return animalTypeData[TypeOfAnimal].Name;
+            return animalTypeData[TypeOfAnimal].name;
         }
     }
 }
