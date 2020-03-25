@@ -22,8 +22,6 @@ namespace GameCore
 
         ISettlement Settlement { get; }
 
-        bool IsInitialized { get; set; }
-
         List<GameObject> gameObjects = new List<GameObject>();
 
         /// <summary>
@@ -32,9 +30,7 @@ namespace GameCore
         public GameObject[] GameObjects 
         {
             get => gameObjects.ToArray();
-        }
-
-        public static Random randomSingletone { get; } = new Random();
+        }        
 
         public GameManager(IMapGenerator mapGenerator, ISettlement settlement)
         {
@@ -42,27 +38,15 @@ namespace GameCore
             Settlement = settlement;
         }
 
-        Size Size { get; set; }
-        int ObjectsNumber { get; set; }
-
+        /// <summary>
+        /// Генерирует карту и заселяет её объектами
+        /// </summary>
+        /// <param name="size">Размер карты</param>
+        /// <param name="objectsNumber">Кол-во объектов для заселения</param>
         public void Initialize(Size size, int objectsNumber)
         {
-            Size = size;
-            ObjectsNumber = objectsNumber;
-
-            IsInitialized = true;
-        }
-
-        /// <summary>
-        /// Запускает игру
-        /// </summary>
-        public void Start()
-        {
-            if (!IsInitialized)
-                throw new Exception("Объект игры не проинициализирован");
-
-            Map = MapGenerator.Generate(Size);
-            Settlement.Populate(ObjectsNumber, gameObjects);
+            Map = MapGenerator.Generate(size);
+            Settlement.Populate(objectsNumber, gameObjects);
         }
     }
 

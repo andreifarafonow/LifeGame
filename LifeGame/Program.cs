@@ -19,14 +19,12 @@ namespace LifeGame
             MaximizeConsole();
 
             IMap map = new MatrixMap();
-            IMapGenerator mapGenerator = new RandomMapGenerator(map, GameManager.randomSingletone);
+            IMapGenerator mapGenerator = new RandomMapGenerator(map, Game.randomSingletone);
 
-            ISettlement settlement = new RandomSettlement(map, GameManager.randomSingletone);
+            ISettlement settlement = new RandomSettlement(map, Game.randomSingletone);
 
-            var game = new GameManager(mapGenerator, settlement);
-
-            game.Initialize(LoadGameSizeFromConfig(),
-                            LoadObjectsNumFromConfig());
+            var game = new Game(LoadGameSizeFromConfig(),
+                                LoadObjectsNumFromConfig());
 
             game.Start();
 

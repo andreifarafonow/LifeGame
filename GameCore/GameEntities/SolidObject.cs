@@ -10,7 +10,7 @@ namespace GameCore.GameEntities
     {
         public SolidObject()
         {
-            TypeOfSolid = (SolidObjectType)GameManager.randomSingletone.Next(Enum.GetNames(typeof(SolidObjectType)).Length);
+            TypeOfSolid = (SolidObjectType)Game.randomSingletone.Next(Enum.GetNames(typeof(SolidObjectType)).Length);
         }
 
         public SolidObjectType TypeOfSolid { get; private set; }

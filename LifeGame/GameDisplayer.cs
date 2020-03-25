@@ -53,7 +53,7 @@ namespace LifeGame
             }
         }
 
-        public static void Display(GameManager game)
+        public static void Display(Game game)
         {
             for (int y = 0; y < game.Map.Size.Height; y++)
             {
