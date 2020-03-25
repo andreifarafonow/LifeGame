@@ -1,5 +1,6 @@
 ﻿using GameCore.GameEntities;
 using GameCore.GameServices.MapServices;
+using Ninject;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -28,9 +29,9 @@ namespace GameCore.GameServices.ObjectsServices
                 GameObject created;
 
                 if (i < solidCount)
-                    created = new SolidObject();
+                    created = new SolidObject(Random);
                 else
-                    created = new Animal();
+                    created = new Animal(Random);
 
                 int x, y;
 

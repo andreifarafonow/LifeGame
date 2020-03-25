@@ -9,9 +9,9 @@ namespace GameCore.GameEntities
     /// </summary>
     class Animal : GameObject
     {
-        public Animal()
+        public Animal(Random random) : base (random)
         {
-            TypeOfAnimal = (AnimalType)Game.randomSingletone.Next(Enum.GetNames(typeof(AnimalType)).Length);
+            TypeOfAnimal = (AnimalType)random.Next(Enum.GetNames(typeof(AnimalType)).Length);
         }
 
         static Dictionary<AnimalType, (int speed, MovingType[] possibleMovings, string name, СanBeLocatedDelegate placementСondition)> animalTypeData = new Dictionary<AnimalType, (int speed, MovingType[] possibleMovings, string name, СanBeLocatedDelegate placementСondition)>()
@@ -121,7 +121,7 @@ namespace GameCore.GameEntities
         {
             MovingType[] possibleMovings = animalTypeData[TypeOfAnimal].possibleMovings;
 
-            return possibleMovings[Game.randomSingletone.Next(possibleMovings.Length)];
+            return possibleMovings[Random.Next(possibleMovings.Length)];
         }
 
         /*bool CheckMove(int fromX, int fromY, MovingDirection dir, int stepLength, MovingType movingType)

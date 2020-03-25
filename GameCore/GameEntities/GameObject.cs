@@ -1,10 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace GameCore.GameEntities
 {
     public abstract class GameObject
     {
+        public GameObject(Random random)
+        {
+            Random = random;
+        }
+
         public delegate bool СanBeLocatedDelegate(WorldCell cell, bool collision);
 
         /// <summary>
@@ -24,5 +30,6 @@ namespace GameCore.GameEntities
         /// Позиция объекта
         /// </summary>
         public Point Position { get; set; }
+        public Random Random { get; }
     }
 }

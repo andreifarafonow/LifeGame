@@ -1,6 +1,7 @@
 ﻿using GameCore.GameEntities;
 using GameCore.GameServices.MapServices;
 using GameCore.GameServices.ObjectsServices;
+using Ninject;
 using System;
 using System.Drawing;
 
@@ -8,8 +9,6 @@ namespace GameCore
 {
     public class Game
     {
-        public static Random randomSingletone { get; } = new Random();
-
         public IMap Map { get => _gameManager.Map; }
 
         /// <summary>
@@ -23,12 +22,9 @@ namespace GameCore
 
         public Game(Size size, int objectsNumber)
         {
-            IMap map = new MatrixMap();
-            IMapGenerator mapGenerator = new RandomMapGenerator(map, Game.randomSingletone);
+            NinjectContext.SetUp(new ProductionNinjectConfig());
 
-            ISettlement settlement = new RandomSettlement(map, Game.randomSingletone);
-
-            _gameManager = new GameManager(mapGenerator, settlement);
+            _gameManager = NinjectContext.Kernel.Get<GameManager>();
 
             Size = size;
             ObjectsNumber = objectsNumber;

@@ -8,9 +8,9 @@ namespace GameCore.GameEntities
     /// </summary>
     class SolidObject : GameObject
     {
-        public SolidObject()
+        public SolidObject(Random random) : base(random)
         {
-            TypeOfSolid = (SolidObjectType)Game.randomSingletone.Next(Enum.GetNames(typeof(SolidObjectType)).Length);
+            TypeOfSolid = (SolidObjectType)Random.Next(Enum.GetNames(typeof(SolidObjectType)).Length);
         }
 
         public SolidObjectType TypeOfSolid { get; private set; }
