@@ -41,7 +41,7 @@ namespace GameCore.GameServices.ObjectsServices
 
                     created.Position = new Point(x, y);
                 }
-                while (!created.CanLocationAt(Map[y, x], objects.Where(obj => obj.Position == created.Position)));
+                while (!created.СanBeLocatedAt(Map[y, x], objects.Where(obj => obj.Position == created.Position)));
 
                 objects.Add(created);
             }

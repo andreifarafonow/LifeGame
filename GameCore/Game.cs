@@ -43,14 +43,14 @@ namespace GameCore
         }
 
         Size Size { get; set; }
-
         int ObjectsNumber { get; set; }
 
         public void Initialize(Size size, int objectsNumber)
         {
             Size = size;
-            IsInitialized = true;
             ObjectsNumber = objectsNumber;
+
+            IsInitialized = true;
         }
 
         /// <summary>

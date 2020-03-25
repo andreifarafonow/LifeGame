@@ -12,14 +12,17 @@ namespace LifeGame
         static int gridLeftMargin = 4, gridTopMargin = 2, 
                    cellWidth = 9, cellHeight = 5;
 
-        static void DrawCellBackground(int x, int y, bool ground)
+        static Dictionary<WorldCell.CellType, ConsoleColor> cellColors = new Dictionary<WorldCell.CellType, ConsoleColor>()
+        {
+            { WorldCell.CellType.Ground,  ConsoleColor.DarkGreen },
+            { WorldCell.CellType.Water,  ConsoleColor.Cyan }
+        };
+
+        static void DrawCellBackground(int x, int y, WorldCell.CellType cellType)
         {
             for (int i = 0; i < cellHeight; i++)
             {
-                if (ground)
-                    Console.ForegroundColor = Console.BackgroundColor = ConsoleColor.DarkGreen;
-                else
-                    Console.ForegroundColor = Console.BackgroundColor = ConsoleColor.Cyan;
+                Console.ForegroundColor = Console.BackgroundColor = cellColors[cellType];
 
                 Console.SetCursorPosition(gridLeftMargin + x * cellWidth, gridTopMargin + y * cellHeight + i);
 
@@ -56,9 +59,7 @@ namespace LifeGame
             {
                 for (int x = 0; x < game.Map.Size.Width; x++)
                 {
-                    bool ground = game.Map[y, x].TypeOfCell == WorldCell.CellType.Ground;
-
-                    DrawCellBackground(x, y, ground);
+                    DrawCellBackground(x, y, game.Map[y, x].TypeOfCell);
 
                     var objectsOnThisCell = game.GameObjects.Where(obj => obj.Position == new Point(x, y));
 

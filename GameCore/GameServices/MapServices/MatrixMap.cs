@@ -1,5 +1,4 @@
 ﻿using GameCore.GameEntities;
-using System;
 using System.Drawing;
 
 namespace GameCore.GameServices.MapServices

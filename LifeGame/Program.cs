@@ -33,18 +33,18 @@ namespace LifeGame
             GameDisplayer.Display(game);
         }
 
+        static void MaximizeConsole()
+        {
+            Console.WindowHeight = Console.LargestWindowHeight;
+            Console.WindowWidth = Console.LargestWindowWidth;
+        }
+
         static IConfigurationRoot BuildConfiguration()
         {
             return new ConfigurationBuilder()
                    .SetBasePath(Directory.GetCurrentDirectory())
                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                    .Build();
-        }
-
-        static void MaximizeConsole()
-        {
-            Console.WindowHeight = Console.LargestWindowHeight;
-            Console.WindowWidth = Console.LargestWindowWidth;
         }
 
         static Size LoadGameSizeFromConfig()
