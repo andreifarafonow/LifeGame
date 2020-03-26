@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using GameCore.GameEntities;
 using GameCore.GameServices.MapServices;
 using GameCore.GameServices.ObjectsServices;
 
-namespace GameCore
+namespace GameCore.GameServices
 {
     class GameManager
     {
@@ -27,10 +25,10 @@ namespace GameCore
         /// <summary>
         /// Список объектов, размещённых на карте
         /// </summary>
-        public GameObject[] GameObjects 
+        public GameObject[] GameObjects
         {
             get => gameObjects.ToArray();
-        }        
+        }
 
         public GameManager(IMapGenerator mapGenerator, ISettlement settlement)
         {
@@ -49,6 +47,4 @@ namespace GameCore
             Settlement.Populate(objectsNumber, gameObjects);
         }
     }
-
-    
 }

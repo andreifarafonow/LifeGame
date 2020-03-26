@@ -124,52 +124,25 @@ namespace GameCore.GameEntities
             return possibleMovings[Random.Next(possibleMovings.Length)];
         }
 
-        /*bool CheckMove(int fromX, int fromY, MovingDirection dir, int stepLength, MovingType movingType)
+        bool CanMoveTo(WorldCell target, IEnumerable<GameObject> objectsOnTargetCell, MovingType movingType)
         {
-            for (int i = 1; i <= stepLength; i++)
+            // Выход за пределы карты
+            if (target == null)
+                return false;
+
+            bool collision = objectsOnTargetCell.Any(obj => obj is SolidObject);
+
+            if (movingType == MovingType.Swim)
             {
-                int currentX = fromX, currentY = fromY;
-
-                switch (dir)
-                {
-                    case MovingDirection.Right:
-                        currentX = fromX + i;
-                        break;
-                    case MovingDirection.Down:
-                        currentY = currentY + i;
-                        break;
-                    case MovingDirection.Left:
-                        currentX = fromX - i;
-                        break;
-                    case MovingDirection.Up:
-                        currentY = fromY - i;
-                        break;
-                }
-
-                // Выход за пределы карты
-                if (currentX < 0 || currentY < 0 || currentX >= GameInstance.Map.Size.Width || currentY >= GameInstance.Map.Size.Height)
-                    return false;
-
-                bool collision = CollisionIn(new Point(currentX, currentY));
-
-                if (movingType == MovingType.Swim)
-                {
-                    if (Map[currentY, currentX].TypeOfCell == WorldCell.CellType.Ground)
-                        return false;
-                    if (collision)
-                        return false;
-                }
-                else if (movingType == MovingType.Go)
-                {
-                    if (Map[currentY, currentX].TypeOfCell == WorldCell.CellType.Water)
-                        return false;
-                    if (collision)
-                        return false;
-                }
+                return target.TypeOfCell == WorldCell.CellType.Water && !collision;
+            }
+            else if (movingType == MovingType.Go)
+            {
+                return target.TypeOfCell == WorldCell.CellType.Ground && !collision;
             }
 
             return true;
-        }*/
+        }
 
         public override bool СanBeLocatedAt(WorldCell cell, IEnumerable<GameObject> neighbors)
         {

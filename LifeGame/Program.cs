@@ -2,8 +2,6 @@
 using System.Drawing;
 using System.IO;
 using GameCore;
-using GameCore.GameServices.MapServices;
-using GameCore.GameServices.ObjectsServices;
 using Microsoft.Extensions.Configuration;
 
 namespace LifeGame
