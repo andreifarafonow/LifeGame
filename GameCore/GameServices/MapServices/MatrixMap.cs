@@ -9,7 +9,17 @@ namespace GameCore.GameServices.MapServices
 
         public WorldCell this[int y, int x] 
         {
-            get => map[y, x];
+            get
+            {
+                try
+                {
+                    return map[y, x];
+                }
+                catch
+                {
+                    return null;
+                }
+            }
             set => map[y, x] = value; 
         }
 

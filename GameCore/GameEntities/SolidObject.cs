@@ -21,7 +21,7 @@ namespace GameCore.GameEntities
             Tree
         }
 
-        static Dictionary<SolidObjectType, (string name, СanBeLocatedDelegate placementСondition)> solidTypeData = new Dictionary<SolidObjectType, (string name, СanBeLocatedDelegate placementСondition)>()
+        static Dictionary<SolidObjectType, (string name, СanMoveTo placementСondition)> solidTypeData = new Dictionary<SolidObjectType, (string name, СanMoveTo placementСondition)>()
         {
             { 
                 SolidObjectType.Stone, 

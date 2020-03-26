@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using System.Threading;
 using GameCore;
 using Microsoft.Extensions.Configuration;
 
@@ -21,7 +22,12 @@ namespace LifeGame
 
             game.Start();
 
-            GameDisplayer.Display(game);
+            while (true)
+            {
+                GameDisplayer.Display(game);
+                Thread.Sleep(1000 / LoadFpsFromConfig());
+                game.Step();
+            }
         }
 
         static void MaximizeConsole()
@@ -46,6 +52,11 @@ namespace LifeGame
         static int LoadObjectsNumFromConfig()
         {
             return int.Parse(configuration.GetSection("objectsNumber").Value);
+        }
+
+        static int LoadFpsFromConfig()
+        {
+            return int.Parse(configuration.GetSection("fps").Value);
         }
     }
 }

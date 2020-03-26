@@ -33,5 +33,10 @@ namespace GameCore
         {
             _gameManager.Initialize(Size, ObjectsNumber);
         }
+
+        public void Step()
+        {
+            _gameManager.Step();
+        }
     }
 }

@@ -7,14 +7,14 @@ namespace GameCore.GameEntities
     /// <summary>
     /// Класс животного. Наследуется от GameObject
     /// </summary>
-    class Animal : GameObject
+    public class Animal : GameObject
     {
         public Animal(Random random) : base (random)
         {
             TypeOfAnimal = (AnimalType)random.Next(Enum.GetNames(typeof(AnimalType)).Length);
         }
 
-        static Dictionary<AnimalType, (int speed, MovingType[] possibleMovings, string name, СanBeLocatedDelegate placementСondition)> animalTypeData = new Dictionary<AnimalType, (int speed, MovingType[] possibleMovings, string name, СanBeLocatedDelegate placementСondition)>()
+        static Dictionary<AnimalType, (int speed, MovingType[] possibleMovings, string name)> animalTypeData = new Dictionary<AnimalType, (int speed, MovingType[] possibleMovings, string name)>()
         {
             {
                 AnimalType.Duck,
@@ -24,8 +24,7 @@ namespace GameCore.GameEntities
                     {
                         MovingType.Swim, MovingType.Fly, MovingType.Go
                     },
-                    "Утка",
-                    (cell, collision) => true
+                    "Утка"
                 ) 
             },
 
@@ -37,8 +36,7 @@ namespace GameCore.GameEntities
                     {
                         MovingType.Swim 
                     },
-                    "Рыба",
-                    (cell, collision) => cell.TypeOfCell == WorldCell.CellType.Water && !collision
+                    "Рыба"
                 )
             },
 
@@ -50,8 +48,7 @@ namespace GameCore.GameEntities
                     {
                         MovingType.Go
                     },
-                    "Кролик",
-                    (cell, collision) => cell.TypeOfCell == WorldCell.CellType.Ground && !collision
+                    "Кролик"
                 )
             },
 
@@ -63,8 +60,7 @@ namespace GameCore.GameEntities
                     {
                         MovingType.Fly, MovingType.Go
                     },
-                    "Воробей",
-                    (cell, collision) => true
+                    "Воробей"
                 )
             },
 
@@ -76,9 +72,26 @@ namespace GameCore.GameEntities
                     {
                         MovingType.Swim, MovingType.Go
                     },
-                    "Черепаха",
-                    (cell, collision) => !collision
+                    "Черепаха"
                 )
+            }
+        };
+
+        static Dictionary<MovingType, СanMoveTo> movingСonditions = new Dictionary<MovingType, СanMoveTo>()
+        {
+            {
+                MovingType.Fly,
+                (target, collision) => target != null
+            },
+
+            {
+                MovingType.Go,
+                (target, collision) => target != null && target.TypeOfCell == WorldCell.CellType.Ground && !collision
+            },
+
+            {
+                MovingType.Swim,
+                (target, collision) => target != null && target.TypeOfCell == WorldCell.CellType.Water && !collision
             }
         };
 
@@ -109,47 +122,28 @@ namespace GameCore.GameEntities
         /// <summary>
         /// Направления перемещений
         /// </summary>
-        public enum MovingDirection
-        {
-            Right,
-            Down,
-            Left,
-            Up
-        }
+        
 
-        MovingType RandomPossibleMovingType()
+        public MovingType RandomPossibleMovingType()
         {
             MovingType[] possibleMovings = animalTypeData[TypeOfAnimal].possibleMovings;
 
             return possibleMovings[Random.Next(possibleMovings.Length)];
         }
-
-        bool CanMoveTo(WorldCell target, IEnumerable<GameObject> objectsOnTargetCell, MovingType movingType)
-        {
-            // Выход за пределы карты
-            if (target == null)
-                return false;
-
-            bool collision = objectsOnTargetCell.Any(obj => obj is SolidObject);
-
-            if (movingType == MovingType.Swim)
-            {
-                return target.TypeOfCell == WorldCell.CellType.Water && !collision;
-            }
-            else if (movingType == MovingType.Go)
-            {
-                return target.TypeOfCell == WorldCell.CellType.Ground && !collision;
-            }
-
-            return true;
-        }
-
         public override bool СanBeLocatedAt(WorldCell cell, IEnumerable<GameObject> neighbors)
         {
             bool collision = neighbors.Any(obj => obj is SolidObject);
 
-            return animalTypeData[TypeOfAnimal].placementСondition(cell, collision);
+            return animalTypeData[TypeOfAnimal].possibleMovings.Any(x => movingСonditions[x](cell, collision));
         }
+
+        public bool CanMoveTo(WorldCell cell, IEnumerable<GameObject> neighbors, MovingType movingType)
+        {
+            bool collision = neighbors.Any(obj => obj is SolidObject);
+
+            return movingСonditions[movingType](cell, collision);
+        }
+
         public override string ToString()
         {
             return animalTypeData[TypeOfAnimal].name;

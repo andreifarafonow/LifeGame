@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using static GameCore.GameEntities.Animal;
 
 namespace GameCore.GameEntities
 {
@@ -11,7 +12,7 @@ namespace GameCore.GameEntities
             Random = random;
         }
 
-        public delegate bool СanBeLocatedDelegate(WorldCell cell, bool collision);
+        public delegate bool СanMoveTo(WorldCell target, bool collision);
 
         /// <summary>
         /// Возвращает возможность объекта занимать данную ячейку, а также соседничать с другими объектами, находящимися в данной ячейке
