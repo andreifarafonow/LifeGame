@@ -11,16 +11,18 @@ namespace GameCore.GameServices.ObjectsServices
 {
     public class RandomSettlement : ISettlement
     {
-        public RandomSettlement(IMap map, Random random)
+        public RandomSettlement(IMap map, IGameObjectsContainer objectsContainer, Random random)
         {
             Map = map;
+            ObjectsContainer = objectsContainer;
             Random = random;
         }
 
-        public IMap Map { get; }
-        public Random Random { get; }
+        IMap Map { get; }
+        IGameObjectsContainer ObjectsContainer { get; }
+        Random Random { get; }
 
-        public void Populate(int objectsNum, List<GameObject> objects)
+        public void Populate(int objectsNum)
         {
             int solidCount = Random.Next(objectsNum);
 
@@ -42,9 +44,9 @@ namespace GameCore.GameServices.ObjectsServices
 
                     created.Position = new Point(x, y);
                 }
-                while (!created.СanBeLocatedAt(Map[y, x], objects.Where(obj => obj.Position == created.Position)));
+                while (!created.СanBeLocatedAt(Map[y, x], ObjectsContainer.GetObjectsInPosition(created.Position)));
 
-                objects.Add(created);
+                ObjectsContainer.Add(created);
             }
         }
     }

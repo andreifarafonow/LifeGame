@@ -13,6 +13,7 @@ namespace GameCore
 			Bind<IMapGenerator>().To<RandomMapGenerator>();
 			Bind<ISettlement>().To<RandomSettlement>();
 			Bind<Random>().ToConstant(new Random());
+			Bind<IGameObjectsContainer>().To<ListGameObjectsContainer>().InSingletonScope();
 		}
 	}
 }

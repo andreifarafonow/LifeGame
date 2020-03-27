@@ -25,7 +25,7 @@ namespace GameCore.GameEntities
                         MovingType.Swim, MovingType.Fly, MovingType.Go
                     },
                     "Утка"
-                ) 
+                )
             },
 
             {
@@ -34,7 +34,7 @@ namespace GameCore.GameEntities
                     1,
                     new MovingType[]
                     {
-                        MovingType.Swim 
+                        MovingType.Swim
                     },
                     "Рыба"
                 )
@@ -77,7 +77,7 @@ namespace GameCore.GameEntities
             }
         };
 
-        static Dictionary<MovingType, СanMoveTo> movingСonditions = new Dictionary<MovingType, СanMoveTo>()
+        static Dictionary<MovingType, PlacementDelegate> movingСonditions = new Dictionary<MovingType, PlacementDelegate>()
         {
             {
                 MovingType.Fly,
@@ -123,18 +123,16 @@ namespace GameCore.GameEntities
         /// Направления перемещений
         /// </summary>
         
+        public override bool СanBeLocatedAt(WorldCell cell, IEnumerable<GameObject> neighbors)
+        {
+            return animalTypeData[TypeOfAnimal].possibleMovings.Any(x => CanMoveTo(cell, neighbors, x));
+        }
 
         public MovingType RandomPossibleMovingType()
         {
             MovingType[] possibleMovings = animalTypeData[TypeOfAnimal].possibleMovings;
 
             return possibleMovings[Random.Next(possibleMovings.Length)];
-        }
-        public override bool СanBeLocatedAt(WorldCell cell, IEnumerable<GameObject> neighbors)
-        {
-            bool collision = neighbors.Any(obj => obj is SolidObject);
-
-            return animalTypeData[TypeOfAnimal].possibleMovings.Any(x => movingСonditions[x](cell, collision));
         }
 
         public bool CanMoveTo(WorldCell cell, IEnumerable<GameObject> neighbors, MovingType movingType)

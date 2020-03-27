@@ -12,7 +12,7 @@ namespace GameCore.GameEntities
             Random = random;
         }
 
-        public delegate bool СanMoveTo(WorldCell target, bool collision);
+        public delegate bool PlacementDelegate(WorldCell target, bool collision);
 
         /// <summary>
         /// Возвращает возможность объекта занимать данную ячейку, а также соседничать с другими объектами, находящимися в данной ячейке

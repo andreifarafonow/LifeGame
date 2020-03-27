@@ -22,22 +22,26 @@ namespace GameCore.GameServices
         IMapGenerator MapGenerator { get; }
 
         ISettlement Settlement { get; }
+
+        IGameObjectsContainer ObjectsContainer { get; }
+
         Random Random { get; }
 
-        List<GameObject> gameObjects = new List<GameObject>();
+        
 
         /// <summary>
         /// Список объектов, размещённых на карте
         /// </summary>
         public GameObject[] GameObjects
         {
-            get => gameObjects.ToArray();
+            get => ObjectsContainer.GetAllObjects().ToArray();
         }
 
-        public GameManager(IMapGenerator mapGenerator, ISettlement settlement, Random random)
+        public GameManager(IMapGenerator mapGenerator, ISettlement settlement, IGameObjectsContainer objectsContainer, Random random)
         {
             MapGenerator = mapGenerator;
             Settlement = settlement;
+            ObjectsContainer = objectsContainer;
             Random = random;
         }
 
@@ -49,28 +53,22 @@ namespace GameCore.GameServices
         public void Initialize(Size size, int objectsNumber)
         {
             Map = MapGenerator.Generate(size);
-            Settlement.Populate(objectsNumber, gameObjects);
+            Settlement.Populate(objectsNumber);
         }
 
-        public enum MovingDirection
+        Point RandomDirection(Point from)
         {
-            Right,
-            Down,
-            Left,
-            Up
-        }
+            int dir = Random.Next(4);
 
-        Point PosAfterDir(Point from, MovingDirection dir)
-        {
             switch(dir)
             {
-                case MovingDirection.Down:
+                case 0:
                     return new Point(from.X, from.Y + 1);
-                case MovingDirection.Up:
+                case 1:
                     return new Point(from.X, from.Y - 1);
-                case MovingDirection.Left:
+                case 2:
                     return new Point(from.X - 1, from.Y);
-                case MovingDirection.Right:
+                case 3:
                     return new Point(from.X + 1, from.Y);
             }
             throw new Exception();
@@ -78,21 +76,17 @@ namespace GameCore.GameServices
 
         public void Step()
         {
-            var animals = gameObjects.OfType<Animal>();
+            var animals = ObjectsContainer.GetAllObjects().OfType<Animal>();
 
             foreach (var animal in animals)
             {
                 MovingType movingType;
-                MovingDirection dir;
-
                 Point newPosition;
 
                 do
                 {
                     movingType = animal.RandomPossibleMovingType();
-                    dir = (MovingDirection)Random.Next(Enum.GetNames(typeof(MovingDirection)).Length);
-
-                    newPosition = PosAfterDir(animal.Position, dir);
+                    newPosition = RandomDirection(animal.Position);
                 }
                 while (!animal.CanMoveTo(Map[newPosition.Y, newPosition.X], GameObjects.Where(obj => obj.Position == newPosition), movingType));
 

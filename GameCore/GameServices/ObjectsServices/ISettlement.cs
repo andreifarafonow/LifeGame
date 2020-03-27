@@ -12,6 +12,6 @@ namespace GameCore.GameServices.ObjectsServices
         /// </summary>
         /// <param name="objectsNum">Число объектов для заселения</param>
         /// <param name="objects">Список объектов игры, в который будут добавляться новые</param>
-        void Populate(int objectsNum, List<GameObject> objects);
+        void Populate(int objectsNum);
     }
 }

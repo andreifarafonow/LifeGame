@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameCore.GameServices.ObjectsServices;
+using System;
 using System.Collections.Generic;
 
 namespace GameCore.GameEntities
@@ -21,7 +22,7 @@ namespace GameCore.GameEntities
             Tree
         }
 
-        static Dictionary<SolidObjectType, (string name, СanMoveTo placementСondition)> solidTypeData = new Dictionary<SolidObjectType, (string name, СanMoveTo placementСondition)>()
+        static Dictionary<SolidObjectType, (string name, PlacementDelegate placementСondition)> solidTypeData = new Dictionary<SolidObjectType, (string name, PlacementDelegate placementСondition)>()
         {
             { 
                 SolidObjectType.Stone, 
