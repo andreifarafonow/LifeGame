@@ -1,17 +1,35 @@
 ﻿using GameCore.GameEntities;
 using GameCore.GameServices.MapServices;
-using Ninject;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
+using static GameCore.GameEntities.GameObject;
+using static GameCore.GameEntities.SolidObject;
 
 namespace GameCore.GameServices.ObjectsServices
 {
-    public class RandomSettlement : ISettlement
+    public class RandomSettlementAndMoving : IGameObjectEstablishment
     {
-        public RandomSettlement(IMap map, IGameObjectsContainer objectsContainer, Random random)
+        static Dictionary<SolidObjectType, (string name, PlacementDelegate placementСondition)> solidTypeData = new Dictionary<SolidObjectType, (string name, PlacementDelegate placementСondition)>()
+        {
+            {
+                SolidObjectType.Stone,
+                (
+                    "Камень",
+                    (cell, collision) => true
+                )
+            },
+
+            {
+                SolidObjectType.Tree,
+                (
+                    "Дерево",
+                    (cell, collision) => cell.TypeOfCell == WorldCell.CellType.Ground
+                )
+            }
+        };
+
+        public RandomSettlementAndMoving(IMap map, IGameObjectsContainer objectsContainer, Random random)
         {
             Map = map;
             ObjectsContainer = objectsContainer;

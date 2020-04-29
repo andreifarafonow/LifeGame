@@ -3,60 +3,35 @@ using System.Drawing;
 using System.IO;
 using System.Threading;
 using GameCore;
+using LifeGame.Services;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LifeGame
 {
     class Program
     {
-        static IConfigurationRoot configuration;
-
         static void Main()
         {
-            configuration = BuildConfiguration();
+            var serviceProvider = new ServiceCollection()
+            .AddSingleton<IConfigService, JsonConfig>()
+            .BuildServiceProvider();
 
-            MaximizeConsole();
+            var config = serviceProvider.GetService<IConfigService>();
 
-            var game = new Game(LoadGameSizeFromConfig(),
-                                LoadObjectsNumFromConfig());
+            ConsoleHelper.MaximizeConsole();
+
+            var game = new Game(config.GameSize, config.ObjectsNum);
 
             game.Start();
 
             while (true)
             {
-                GameDisplayer.Display(game);
-                Thread.Sleep(1000 / LoadFpsFromConfig());
+                ConsoleGamePresentation.Display(game);
+                Thread.Sleep(1000 / config.Fps);
                 game.Step();
             }
         }
-
-        static void MaximizeConsole()
-        {
-            Console.WindowHeight = Console.LargestWindowHeight;
-            Console.WindowWidth = Console.LargestWindowWidth;
-        }
-
-        static IConfigurationRoot BuildConfiguration()
-        {
-            return new ConfigurationBuilder()
-                   .SetBasePath(Directory.GetCurrentDirectory())
-                   .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                   .Build();
-        }
-
-        static Size LoadGameSizeFromConfig()
-        {
-            return new Size(int.Parse(configuration.GetSection("gameWidth").Value), int.Parse(configuration.GetSection("gameHeight").Value));
-        }
-
-        static int LoadObjectsNumFromConfig()
-        {
-            return int.Parse(configuration.GetSection("objectsNumber").Value);
-        }
-
-        static int LoadFpsFromConfig()
-        {
-            return int.Parse(configuration.GetSection("fps").Value);
-        }
+        
     }
 }

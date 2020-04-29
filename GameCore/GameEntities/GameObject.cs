@@ -31,6 +31,6 @@ namespace GameCore.GameEntities
         /// Позиция объекта
         /// </summary>
         public Point Position { get; set; }
-        public Random Random { get; }
+        protected Random Random { get; }
     }
 }

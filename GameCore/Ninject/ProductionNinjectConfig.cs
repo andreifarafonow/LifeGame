@@ -11,7 +11,7 @@ namespace GameCore
 		{
 			Bind<IMap>().To<MatrixMap>().InSingletonScope();
 			Bind<IMapGenerator>().To<RandomMapGenerator>();
-			Bind<ISettlement>().To<RandomSettlement>();
+			Bind<IGameObjectEstablishment>().To<RandomSettlementAndMoving>();
 			Bind<Random>().ToConstant(new Random());
 			Bind<IGameObjectsContainer>().To<ListGameObjectsContainer>().InSingletonScope();
 		}

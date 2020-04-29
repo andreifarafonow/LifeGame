@@ -21,7 +21,7 @@ namespace GameCore.GameServices
         /// </summary>
         IMapGenerator MapGenerator { get; }
 
-        ISettlement Settlement { get; }
+        IGameObjectEstablishment Settlement { get; }
 
         IGameObjectsContainer ObjectsContainer { get; }
 
@@ -37,7 +37,7 @@ namespace GameCore.GameServices
             get => ObjectsContainer.GetAllObjects().ToArray();
         }
 
-        public GameManager(IMapGenerator mapGenerator, ISettlement settlement, IGameObjectsContainer objectsContainer, Random random)
+        public GameManager(IMapGenerator mapGenerator, IGameObjectEstablishment settlement, IGameObjectsContainer objectsContainer, Random random)
         {
             MapGenerator = mapGenerator;
             Settlement = settlement;

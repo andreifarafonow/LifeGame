@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace LifeGame
 {
-    static class GameDisplayer
+    static class ConsoleGamePresentation
     {
         static int gridLeftMargin = 4, gridTopMargin = 2, 
                    cellWidth = 9, cellHeight = 5;
@@ -18,25 +18,25 @@ namespace LifeGame
             { WorldCell.CellType.Water,  ConsoleColor.Cyan }
         };
 
-        static void DrawCellBackground(int x, int y, WorldCell.CellType cellType)
+        static void DrawCellBackground(Point position, WorldCell.CellType cellType)
         {
             for (int i = 0; i < cellHeight; i++)
             {
                 Console.ForegroundColor = Console.BackgroundColor = cellColors[cellType];
 
-                Console.SetCursorPosition(gridLeftMargin + x * cellWidth, gridTopMargin + y * cellHeight + i);
+                Console.SetCursorPosition(gridLeftMargin + position.X * cellWidth, gridTopMargin + position.Y * cellHeight + i);
 
                 Console.WriteLine(string.Concat(Enumerable.Repeat('█', cellWidth)));
             }
         }
 
-        static void DrawObjectsNumInCell(int x, int y, int num)
+        static void DrawObjectsNumInCell(Point position, int num)
         {
-            Console.SetCursorPosition(gridLeftMargin + x * cellWidth + 3, gridTopMargin + y * cellHeight + 2);
+            Console.SetCursorPosition(gridLeftMargin + position.X * cellWidth + 3, gridTopMargin + position.Y * cellHeight + 2);
             Console.Write($"[{num}]");
         }
 
-        static void DrawObjectsNamesInCell(int x, int y, IEnumerable<GameObject> objects)
+        static void DrawObjectsNamesInCell(IEnumerable<GameObject> objects)
         {
             int offset = 0;
 
@@ -59,7 +59,7 @@ namespace LifeGame
             {
                 for (int x = 0; x < game.Map.Size.Width; x++)
                 {
-                    DrawCellBackground(x, y, game.Map[y, x].TypeOfCell);
+                    DrawCellBackground(new Point(x, y), game.Map[y, x].TypeOfCell);
 
                     var objectsOnThisCell = game.GameObjects.Where(obj => obj.Position == new Point(x, y));
 
@@ -67,11 +67,11 @@ namespace LifeGame
 
                     if (objectsOnThisCell.Count() > 3)
                     {
-                        DrawObjectsNumInCell(x, y, objectsOnThisCell.Count());
+                        DrawObjectsNumInCell(new Point(x, y), objectsOnThisCell.Count());
                     }
                     else if (objectsOnThisCell.Count() > 0)
                     {
-                        DrawObjectsNamesInCell(x, y, objectsOnThisCell);
+                        DrawObjectsNamesInCell(objectsOnThisCell);
                     }
                 }
             }
