@@ -1,7 +1,10 @@
 ﻿using GameCore.GameEntities;
 using GameCore.GameServices;
 using GameCore.GameServices.MapServices;
+using GameCore.GameServices.ObjectsServices;
+using Microsoft.Extensions.DependencyInjection;
 using Ninject;
+using System;
 using System.Drawing;
 
 namespace GameCore
@@ -21,9 +24,16 @@ namespace GameCore
 
         public Game(Size size, int objectsNumber)
         {
-            NinjectContext.SetUp(new ProductionNinjectConfig());
+            var serviceProvider = new ServiceCollection()
+            .AddSingleton<IMap, MatrixMap>()
+            .AddTransient<IMapGenerator, RandomMapGenerator>()
+            .AddTransient<IGameObjectEstablishment, RandomSettlementAndMoving>()
+            .AddSingleton(new Random())
+            .AddSingleton<IGameObjectsContainer, ListGameObjectsContainer>()
+            .AddSingleton<GameManager>()
+            .BuildServiceProvider();
 
-            _gameManager = NinjectContext.Kernel.Get<GameManager>();
+            _gameManager = serviceProvider.GetService<GameManager>();
 
             Size = size;
             ObjectsNumber = objectsNumber;

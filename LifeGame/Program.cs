@@ -21,7 +21,7 @@ namespace LifeGame
 
             ConsoleHelper.MaximizeConsole();
 
-            var game = new Game(config.GameSize, config.ObjectsNum);
+            var game = new Game(config.GameSize, config.ObjectCount);
 
             game.Start();
 

@@ -9,7 +9,7 @@ namespace LifeGame.Services
     {
         public Size GameSize { get; }
 
-        public int ObjectsNum { get; }
+        public int ObjectCount { get; }
 
         public int Fps { get; }
 
@@ -18,7 +18,7 @@ namespace LifeGame.Services
             IConfigurationRoot configuration = BuildConfiguration();
 
             GameSize = new Size(int.Parse(configuration.GetSection("gameWidth").Value), int.Parse(configuration.GetSection("gameHeight").Value));
-            ObjectsNum = int.Parse(configuration.GetSection("objectsNumber").Value);
+            ObjectCount = int.Parse(configuration.GetSection("objectsNumber").Value);
             Fps = int.Parse(configuration.GetSection("fps").Value);
         }
 
