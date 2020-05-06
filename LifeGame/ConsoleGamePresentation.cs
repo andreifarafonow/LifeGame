@@ -7,18 +7,18 @@ using System.Linq;
 
 namespace LifeGame
 {
-    static class ConsoleGamePresentation
+    public class ConsoleGamePresentation
     {
-        static int gridLeftMargin = 4, gridTopMargin = 2, 
+        int gridLeftMargin = 4, gridTopMargin = 2, 
                    cellWidth = 9, cellHeight = 5;
 
-        static Dictionary<WorldCell.CellType, ConsoleColor> cellColors = new Dictionary<WorldCell.CellType, ConsoleColor>()
+        Dictionary<WorldCell.CellType, ConsoleColor> cellColors = new Dictionary<WorldCell.CellType, ConsoleColor>()
         {
             { WorldCell.CellType.Ground,  ConsoleColor.DarkGreen },
             { WorldCell.CellType.Water,  ConsoleColor.Cyan }
         };
 
-        static void DrawCellBackground(Point position, WorldCell.CellType cellType)
+        void DrawCellBackground(Point position, WorldCell.CellType cellType)
         {
             for (int i = 0; i < cellHeight; i++)
             {
@@ -30,13 +30,13 @@ namespace LifeGame
             }
         }
 
-        static void DrawObjectsNumInCell(Point position, int num)
+        void DrawObjectsNumInCell(Point position, int num)
         {
             Console.SetCursorPosition(gridLeftMargin + position.X * cellWidth + 3, gridTopMargin + position.Y * cellHeight + 2);
             Console.Write($"[{num}]");
         }
 
-        static void DrawObjectsNamesInCell(IEnumerable<GameObject> objects)
+        void DrawObjectsNamesInCell(IEnumerable<GameObject> objects)
         {
             int offset = 0;
 
@@ -53,7 +53,7 @@ namespace LifeGame
             }
         }
 
-        public static void Display(Game game)
+        public void Display(Game game)
         {
             for (int y = 0; y < game.Map.Size.Height; y++)
             {

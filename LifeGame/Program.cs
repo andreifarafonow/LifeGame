@@ -15,9 +15,11 @@ namespace LifeGame
         {
             var serviceProvider = new ServiceCollection()
             .AddSingleton<IConfigService, JsonConfig>()
+            .AddSingleton<ConsoleGamePresentation>()
             .BuildServiceProvider();
 
             var config = serviceProvider.GetService<IConfigService>();
+            var consoleGamePresentation = serviceProvider.GetService<ConsoleGamePresentation>();
 
             ConsoleHelper.MaximizeConsole();
 
@@ -27,7 +29,7 @@ namespace LifeGame
 
             while (true)
             {
-                ConsoleGamePresentation.Display(game);
+                consoleGamePresentation.Display(game);
                 Thread.Sleep(1000 / config.Fps);
                 game.Step();
             }
