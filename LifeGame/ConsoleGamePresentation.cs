@@ -12,17 +12,15 @@ namespace LifeGame
         int gridLeftMargin = 4, gridTopMargin = 2, 
                    cellWidth = 9, cellHeight = 5;
 
-        Dictionary<WorldCell.CellType, ConsoleColor> cellColors = new Dictionary<WorldCell.CellType, ConsoleColor>()
-        {
-            { WorldCell.CellType.Ground,  ConsoleColor.DarkGreen },
-            { WorldCell.CellType.Water,  ConsoleColor.Cyan }
-        };
+        
+
+        
 
         void DrawCellBackground(Point position, WorldCell.CellType cellType)
         {
             for (int i = 0; i < cellHeight; i++)
             {
-                Console.ForegroundColor = Console.BackgroundColor = cellColors[cellType];
+                Console.ForegroundColor = Console.BackgroundColor = cellType.GetConsoleColor();
 
                 Console.SetCursorPosition(gridLeftMargin + position.X * cellWidth, gridTopMargin + position.Y * cellHeight + i);
 
