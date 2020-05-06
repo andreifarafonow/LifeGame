@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using static GameCore.GameEntities.GameObject;
 using static GameCore.GameEntities.SolidObject;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GameCore.GameServices.ObjectsServices
 {
@@ -51,7 +52,7 @@ namespace GameCore.GameServices.ObjectsServices
                 if (i < solidCount)
                     created = new SolidObject(Random);
                 else
-                    created = new Animal(Random);
+                    created = Game.serviceProvider.GetService<Animal>();
 
                 int x, y;
 
@@ -62,7 +63,7 @@ namespace GameCore.GameServices.ObjectsServices
 
                     created.Position = new Point(x, y);
                 }
-                while (!created.СanBeLocatedAt(Map[y, x], ObjectsContainer.GetObjectsInPosition(created.Position)));
+                while (!created.СanBeLocatedAt(Map[y, x]));
 
                 ObjectsContainer.Add(created);
             }

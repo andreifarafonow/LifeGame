@@ -18,9 +18,8 @@ namespace GameCore.GameEntities
         /// Возвращает возможность объекта занимать данную ячейку, а также соседничать с другими объектами, находящимися в данной ячейке
         /// </summary>
         /// <param name="cell">Ячейка мира</param>
-        /// <param name="neighbors">Соседи</param>
         /// <returns></returns>
-        public abstract bool СanBeLocatedAt(WorldCell cell, IEnumerable<GameObject> neighbors);
+        public abstract bool СanBeLocatedAt(WorldCell cell);
 
         /// <summary>
         /// Идентификатор объекта

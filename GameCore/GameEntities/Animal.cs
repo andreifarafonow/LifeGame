@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameCore.GameServices.ObjectsServices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,9 +10,10 @@ namespace GameCore.GameEntities
     /// </summary>
     public class Animal : GameObject
     {
-        public Animal(Random random) : base (random)
+        public Animal(Random random, IGameObjectsContainer gameObjectContainer) : base (random)
         {
             TypeOfAnimal = (AnimalType)random.Next(Enum.GetNames(typeof(AnimalType)).Length);
+            GameObjectContainer = gameObjectContainer;
         }
 
         static Dictionary<AnimalType, (int speed, MovingType[] possibleMovings, string name)> animalTypeData = new Dictionary<AnimalType, (int speed, MovingType[] possibleMovings, string name)>()
@@ -96,6 +98,7 @@ namespace GameCore.GameEntities
         };
 
         public AnimalType TypeOfAnimal { get; private set; }
+        public IGameObjectsContainer GameObjectContainer { get; }
 
         public enum AnimalType
         {
@@ -123,9 +126,9 @@ namespace GameCore.GameEntities
         /// Направления перемещений
         /// </summary>
         
-        public override bool СanBeLocatedAt(WorldCell cell, IEnumerable<GameObject> neighbors)
+        public override bool СanBeLocatedAt(WorldCell cell)
         {
-            return animalTypeData[TypeOfAnimal].possibleMovings.Any(x => CanMoveTo(cell, neighbors, x));
+            return animalTypeData[TypeOfAnimal].possibleMovings.Any(x => CanMoveTo(cell, GameObjectContainer.GetObjectsInPosition(cell.Position), x));
         }
 
         public MovingType RandomPossibleMovingType()

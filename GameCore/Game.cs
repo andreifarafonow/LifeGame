@@ -11,6 +11,8 @@ namespace GameCore
 {
     public class Game
     {
+        public static ServiceProvider serviceProvider = null;
+
         public IMap Map { get => _gameManager.Map; }
 
         /// <summary>
@@ -24,13 +26,14 @@ namespace GameCore
 
         public Game(Size size, int objectsNumber)
         {
-            var serviceProvider = new ServiceCollection()
+            serviceProvider = new ServiceCollection()
             .AddSingleton<IMap, MatrixMap>()
             .AddTransient<IMapGenerator, RandomMapGenerator>()
             .AddTransient<IGameObjectEstablishment, RandomSettlementAndMoving>()
             .AddSingleton(new Random())
             .AddSingleton<IGameObjectsContainer, ListGameObjectsContainer>()
             .AddSingleton<GameManager>()
+            .AddTransient<Animal>()
             .BuildServiceProvider();
 
             _gameManager = serviceProvider.GetService<GameManager>();

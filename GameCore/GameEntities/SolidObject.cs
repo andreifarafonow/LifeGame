@@ -46,7 +46,7 @@ namespace GameCore.GameEntities
             return solidTypeData[TypeOfSolid].name;
         }
 
-        public override bool СanBeLocatedAt(WorldCell cell, IEnumerable<GameObject> neighbors)
+        public override bool СanBeLocatedAt(WorldCell cell)
         {
             return solidTypeData[TypeOfSolid].placementСondition(cell, false);
         }
